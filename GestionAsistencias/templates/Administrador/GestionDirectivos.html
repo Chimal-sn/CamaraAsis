@@ -1,138 +1,136 @@
 {% extends "Administrador/BaseAdministrador.html" %}
 
 {% block content %}
-
-<body>
-    <h2>Directivos</h2>    
-    <div>
-        <table>
-            <thead>
+<h2>Directivos</h2>    
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Matrícula</th>
+                <th>Eliminar</th>
+                <th>Actualizar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for directivo in directivos %}
                 <tr>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Matrícula</th>
-                    <th>Eliminar</th>
-                    <th>Actualizar</th>
+                    <td>{{ directivo.Nombre }}</td>
+                    <td>{{ directivo.Apellidos }}</td>
+                    <td>{{ directivo.Matricula }}</td>
+                    <td>
+                        <a href="{% url 'EliminarDirectivo' directivo.idDirectivos %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>
+                    </td>
+                    <td>
+                        <button onclick="openModal({{ directivo.idDirectivos }}, '{{ directivo.Nombre }}', '{{ directivo.Apellidos }}', '{{ directivo.Matricula }}', '{{ directivo.Contrasena }}', '{{ directivo.Correo }}')">Actualizar</button>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for directivo in directivos %}
-                    <tr>
-                        <td>{{ directivo.Nombre }}</td>
-                        <td>{{ directivo.Apellidos }}</td>
-                        <td>{{ directivo.Matricula }}</td>
-                        <td>
-                            <!-- Botón de eliminar -->
-                            <a href="{% url 'EliminarDirectivo' directivo.idDirectivos %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">
-                                Eliminar
-                            </a>
-                        </td>
-                        <td>
-                            <!-- Botón para abrir el formulario en el modal -->
-                            <button onclick="openModal({{ directivo.idDirectivos }}, '{{ directivo.Nombre }}', '{{ directivo.Apellidos }}', '{{ directivo.Matricula }}', '{{ directivo.Contrasena }}', '{{ directivo.Correo }}')">Actualizar</button>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    
-    <div>
-        <a href="{% url 'CrearDirectivo' %}">Crear Directivo</a>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-    <!-- Modal para editar directivo -->
-    <div id="editModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Editar Directivo</h2>
+<div>
+    <a href="{% url 'CrearDirectivo' %}">Crear Directivo</a>
+</div>
+
+<!-- Modal para editar directivo -->
+<div id="editModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Editar Directivo</h2>
+        
+        <!-- Formulario de edición -->
+        <form method="POST" action="{% url 'EditarDirectivo' 0 %}" id="editForm">
+            {% csrf_token %}
             
-            <!-- Formulario de edición -->
-            <form method="POST" action="{% url 'EditarDirectivo' 0 %}" id="editForm">
-                {% csrf_token %}
-                
-                <div>
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre">
-                </div>
-                
-                <div>
-                    <label for="apellido">Apellido:</label>
-                    <input type="text" id="apellido" name="apellido">
-                </div>
+            <div>
+                <label for="id_nombre">Nombre:</label>
+                <input type="text" name="nombre" id="id_nombre" required>
+            </div>
+            
+            <div>
+                <label for="id_apellido">Apellido:</label>
+                <input type="text" name="apellido" id="id_apellido" required>
+            </div>
 
-                <div>
-                    <label for="matricula">Matrícula:</label>
-                    <input type="text" id="matricula" name="matricula">
-                </div>
+            <div>
+                <label for="id_matricula">Matrícula:</label>
+                <input type="text" name="matricula" id="id_matricula" required>
+            </div>
 
-                <div>
-                    <label for="Contrasena">Contraseña:</label>
-                    <input type="text" id="Contrasena" name="Contrasena">
-                </div>
+            <div>
+                <label for="id_Contrasena">Contraseña:</label>
+                <input type="text" name="Contrasena" id="id_Contrasena" required>
+            </div>
 
-                <div>
-                    <label for="Correo">Correo:</label>
-                    <input type="text" id="Correo" name="Correo">
-                </div>
+            <div>
+                <label for="id_Correo">Correo:</label>
+                <input type="email" name="Correo" id="id_Correo" required>
+            </div>
 
-                <div>
-                    <button type="submit">Guardar cambios</button>
-                </div>
-            </form>
-        </div>
+            <div>
+                <button type="submit">Guardar cambios</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <!-- Estilos para el modal -->
-    <style>
-        .modal {
-            display: flex;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            width: 400px;
-            position: relative;
-        }
-        
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-    </style>
+<!-- Estilos para el modal -->
+<style>
+    .modal {
+        display: flex;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        width: 400px;
+        position: relative;
+    }
+    
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+</style>
 
-    <!-- JavaScript para manejar la apertura y cierre del modal -->
-    <script>
-        function openModal(id, nombre, apellido, matricula, contrasena, correo) {
-            document.getElementById('editForm').action = `/EditarDirectivo/${id}`;
-            document.getElementById('nombre').value = nombre;
-            document.getElementById('apellido').value = apellido;
-            document.getElementById('matricula').value = matricula;
-            document.getElementById('Contrasena').value = contrasena;
-            document.getElementById('Correo').value = correo;
+<!-- JavaScript para manejar la apertura y cierre del modal -->
+<script>
+    function openModal(id, nombre, apellido, matricula, contrasena, correo) {
+        // Configura el action del formulario
+        document.getElementById('editForm').action = `/EditarDirectivo/${id}`;
+        // Asigna los valores a los campos
+        document.getElementById('id_nombre').value = nombre;
+        document.getElementById('id_apellido').value = apellido;
+        document.getElementById('id_matricula').value = matricula;
+        document.getElementById('id_Contrasena').value = contrasena;
+        document.getElementById('id_Correo').value = correo;
 
-            document.getElementById('editModal').style.display = 'flex';
-        }
+        // Muestra el modal
+        document.getElementById('editModal').style.display = 'flex';
+    }
 
-        function closeModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
-    </script>
+    function closeModal() {
+        // Oculta el modal
+        document.getElementById('editModal').style.display = 'none';
+    }
+</script>
 
-</body>
+
 
 {% endblock %}

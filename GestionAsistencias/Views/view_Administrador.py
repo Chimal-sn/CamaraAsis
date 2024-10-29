@@ -29,7 +29,29 @@ def CerrarSesionAdmin(request):
 
 def GestionarDirectivo(request):
     directivos = Directivos.objects.all()
-    return render(request, 'Administrador/GestionDirectivos.html', {'directivos':directivos})
+    form = DirectivoForm() 
+    return render(request, 'Administrador/GestionDirectivos.html', {'directivos': directivos, 'form': form})
+
+def EditarDirectivo(request, id):
+    directivo = get_object_or_404(Directivos, idDirectivos=id)
+    
+    if request.method == 'POST':
+        # Actualiza los campos del directivo
+        directivo.Nombre = request.POST.get('nombre')
+        directivo.Apellidos = request.POST.get('apellido')  
+        directivo.Matricula = request.POST.get('matricula')  
+        directivo.Contrasena = request.POST.get('Contrasena')  
+        directivo.Correo = request.POST.get('Correo')  
+
+        # Guarda los cambios
+        directivo.save()
+        
+        # Redirige a la página de gestión de directivos
+        return redirect('GestionarDirectivos')
+    
+    # Si es un GET o cualquier otro método, redirige a la página de gestión
+    return redirect('GestionarDirectivos')
+
 
 def BorrarDirectivo (request, id):
     directivo = get_object_or_404(Directivos, idDirectivos=id)
@@ -40,26 +62,6 @@ def BorrarDirectivo (request, id):
 def InicioAdmnistrador(request):
     return render(request, "Administrador/InicioAdministrador.html")
 
-def EditarDirectivo (request, id):
-    directivo = get_object_or_404(Directivos, idDirectivos=id)
-    
-    if request.method == 'POST':
-        directivo = get_object_or_404(Directivos, idDirectivos=id)
-        
-        directivo.Nombre = request.POST.get('nombre')
-        directivo.Apellido = request.POST.get('apellido')
-        directivo.Matricula = request.POST.get('matricula')
-        directivo.Contrasena = request.POST.get('Contrasena')
-        directivo.Correo = request.POST.get('Correo')
-        
-        # Guarda los cambios
-        directivo.save()
-        
-        # Redirige a otra página
-        return redirect('GestionarDirectivos')
-
-    # Si es un método GET, muestra el formulario con los datos del profesor
-    return render(request, 'Administrador/EditarDirectivo.html', {'directivo': directivo})
 
 
 def crear_directivo(request):
