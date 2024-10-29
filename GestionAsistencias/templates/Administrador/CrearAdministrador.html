@@ -1,0 +1,36 @@
+<form method="POST" action="{% url 'CrearDirectivo' %}">
+    {% csrf_token %}
+    
+
+    <div>
+        <label for="nombre">Nombre:</label>
+        {{ form.Nombre }}
+    </div>
+
+    <div>
+        <label for="apellidos">Apellido:</label>
+        {{ form.Apellidos }}
+    </div>
+
+    <div>
+        <label for="matricula">Matrícula:</label>
+        {{ form.Matricula }}
+        <!-- Para mostrar el error específico de matrícula -->
+        {{ form.Matricula.errors }}
+    </div>
+
+    <div>
+        <label for="contrasena">Contraseña:</label>
+        {{ form.Contrasena }}
+    </div>
+
+    <div>
+        <label for="correo">Correo:</label>
+        {{ form.Correo }}
+    </div>
+
+    <div>
+        <button type="submit">Crear Directivo</button>
+    </div>
+</form>
+

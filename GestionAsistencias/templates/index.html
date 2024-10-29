@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+
+<div class="contenedor">
+    <p class="Titulo">Bienvenido <br> :)</p>
+    <div class = "img">
+        <img class="imagen" src="{% static 'MenuInicio/img/inicio.jpg' %}" alt="Cara de una persona de lado">
+    </div>    
+</div>
+
+
+{% endblock %}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'MenuInicio/css/Inicio.css' %}">
+{% endblock %}

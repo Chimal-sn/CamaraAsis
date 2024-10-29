@@ -1,0 +1,23 @@
+<body>
+
+    <h2>Profesores</h2>
+    
+    <div>
+        {% for profesor in profesores %}
+            <p>
+                {{ profesor.Nombre }} {{ profesor.Apellido }} ({{ profesor.Matricula }})
+                <!-- Botón de actualizar -->
+                <a href=" {% url 'EditarProfesor' profesor.idProfesor %}" >
+                    Actualizar
+                </a>
+                
+                <!-- Botón de eliminar -->
+                <a href="{% url 'EliminarProfesor' profesor.idProfesor %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">
+                    Eliminar
+                </a>
+                
+            </p>
+        {% endfor %}
+    </div>
+
+

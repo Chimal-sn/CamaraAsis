@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mi Sitio{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'MenuInicio/css/base.css' %}">
+    {% block extra_css %}
+    {% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="nav-links nav-links-left">
+            <li>
+                <a class="referencia" href="{% url 'Inicio' %}">Inicio</a>
+            </li>
+            <li>
+                <a class="referencia" href="{% url 'lista' %}">Asistencia</a>
+            </li>
+        </ul>
+        <ul class="nav-links nav-links-right">
+            <li>
+                <a class="referencia referencia-boton" href="{% url 'IniciarSesion' %}">Iniciar Sesión</a>
+            </li>
+        </ul>
+    </nav>    
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <!-- Pie de página -->
+    </footer>
+    {% block extra_js %}
+        <!-- Aquí puedes incluir scripts por defecto o en blanco -->
+    {% endblock %}
+</body>
+</html>
+

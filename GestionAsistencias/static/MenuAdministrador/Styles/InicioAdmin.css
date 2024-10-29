@@ -1,0 +1,26 @@
+body{
+   background-color: black;
+   
+}
+
+h1{
+   color: rgb(255, 255, 255);
+
+}
+
+.Fondo{
+   width: 70vw; /* Establece el ancho en 80% del viewport */
+   height: 50vh; /* Establece la altura en 80% del viewport */
+   display: flex;
+   text-align: center;
+   align-items: center; 
+}
+
+.imagen{
+   width: 450px; /* Ancho deseado */
+   height: auto; /* Altura proporcional */   
+}
+
+.f_img{
+   margin-left: auto;
+}

@@ -1,0 +1,30 @@
+{% extends "Administrador/BaseAdministrador.html" %}
+
+{% block content %}
+
+<body>
+    <h2>Reporte de Asistencias</h2>    
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Matricula</th>
+                    <th>Asistencias</th>
+                    <th>Retardo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profesor in profesores %}
+                    <tr>
+                        <td>{{ profesor.Matricula }}</td>
+                        <td>{{ profesor.asistencias_count }}</td>
+                        <td>{{ profesor.retardos_count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+{% endblock%}

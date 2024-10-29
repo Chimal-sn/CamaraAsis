@@ -1,0 +1,18 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Denegado</title>
+    <link rel="stylesheet" href="{% static 'Acceso/Acceso.css' %}">
+</head>
+<body>
+    
+    <img src="{% static 'Acceso/Lobo.png' %}" alt="Lobo rojo"> 
+    <h1>No  tienes permiso para acceder a esta página</h1>
+    <a class = "link" href="{% url "Inicio" %}">Pagina Principal</a>
+
+</body>
+</html>

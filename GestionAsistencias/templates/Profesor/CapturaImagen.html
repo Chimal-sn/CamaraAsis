@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Captura de Imagen</title>
+</head>
+<body>
+    <h1>Captura de Imagen</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="capture">Capturar</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <img id="photo" alt="La foto capturada aparecerá aquí">
+    <form id="upload-form" action="{% url 'upload_image' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="image_data" id="image_data">
+        <button type="submit">Subir Imagen</button>
+    </form>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const photo = document.getElementById('photo');
+        const captureButton = document.getElementById('capture');
+        const imageDataInput = document.getElementById('image_data');
+
+        // Acceder a la cámara
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error("Error al acceder a la cámara: ", err);
+            });
+
+        // Capturar la imagen
+        captureButton.addEventListener('click', () => {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            photo.src = canvas.toDataURL('image/jpeg');  // Usar JPEG en lugar de JPG
+            imageDataInput.value = canvas.toDataURL('image/jpeg');  // Usar JPEG en lugar de JPG
+        });
+    </script>
+</body>
+</html>
+

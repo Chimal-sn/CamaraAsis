@@ -1,0 +1,25 @@
+Crear una carpeta donde se va a almacenar tus trabajos
+
+ANTES DE TODO ESTO NECESITAS PYTHON INSTALADO
+
+Entras a la carpetas desde el cmd
+
+1. cd dektop
+2. cd nombre de la carpeta
+3. pip install virtualenv
+4. virtualenv venv 
+5. Ya puedes entrar a visual Studio
+6. Para activar el ambiente virtual es .venv\Scripts\activate
+7. Instalas django con: pip install django
+8. Para iniciar un proyecto el comando es: django-admin startproject nombre_proyecto
+9. Para usar mysql se necesita descargar el cliente con: pip install mysqlclient
+10 Para crear una aplicaion el comando es: python manage.py startapp nombre_proyecto
+11.Para migrar modelos es con el comando: python manage.py makemigrations 
+12. Para aplicar a la base de datos es con python manage.py migrate
+13. Si la carpeta se pasa a otra computadora borrar las migraciones:
+    Instrucciones:
+    En migrations borra  todos los archivos excepto el que dice  __init__.py
+    Y dentro de migrations hay una carpeta llamada _pycache_ borra todos los archivos excepto  el que dice __init__.cpython de ahi ya puedes realizar los pasos 11 y 12
+
+
+

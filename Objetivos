@@ -1,0 +1,24 @@
+OBJETIVO: Desarrollar un sistema Web que permita gestionar la información para generación automática de las listas de asistencia utilizando reconocimiento de patrones.
+
+     Usuarios:
+          Administrador
+          Profesor
+          Directivo
+          
+     Administrador:
+          Gestionar a los directivos
+          Reporte de asistencia de todos los profesores
+     
+     Directivo:
+          Gestión de profesores 
+          Gestión de horarios de entrada
+          Matricula del profe
+          Gestionar las calificaciones de asistencia
+          Gestionar periodos cuatrimestal
+          Generación de pdf de listas de asistencia    
+          Gestión de horarios de los profesores indicando las asignaturas impartidas, implica cargar un archivo pdf con su horario y poder visualizarlo. 
+
+     Profesor (Ya esta hecho)
+          Pase de lista. Se posiciona frente a cámara para ser reconocido su rostro
+          Reporte de asistencias individuales
+          Solicitud de cambio de calificación de la asistencia (justificante)

@@ -1,0 +1,55 @@
+.navbar {
+    background-color: #000000;
+    padding: 1.5em 2em; /* Ajusta el padding si quieres que la navbar se vea más alta */
+    display: flex;
+    align-items: center;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid white; /* Añade esta línea */
+    position: fixed;
+}
+
+.nav-links {
+    font-family: 'Ubuntu Mono', monospace;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px; /* Espaciado entre los elementos */
+}
+
+.nav-links-left {
+    display: flex;
+    gap: 30px; /* Espaciado entre los enlaces de la izquierda */
+}
+
+.nav-links-right {
+    margin-left: auto; /* Mueve el botón a la derecha */
+}
+
+.referencia {
+    text-decoration: none;
+    font-size: 1.3em;
+    color: white;
+    padding: 0.5em 1em;
+    transition: background-color 0.3s ease;
+}
+
+.referencia:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Añadir un efecto hover */
+    border-radius: 10px; /* Redondeado en hover */
+}
+
+.referencia-boton {
+    background-color: #FFD700; /* Amarillo del botón */
+    color: black;
+    border-radius: 20px;
+    font-weight: bold;
+    padding: 0.5em 1em;
+}
+
+.referencia-boton:hover {
+    background-color: #e6b800; /* Un tono más oscuro de amarillo */
+}

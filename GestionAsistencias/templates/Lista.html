@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<body>
+
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+    <p id="resultado"></p>
+
+    
+</body>
+
+{% endblock  %}
+
+
+{% block extra_js %}
+    <script src="{% static 'MenuInicio/js/Lista.js' %}"></script> 
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'MenuInicio/css/Lista.css' %}">
+{% endblock %}

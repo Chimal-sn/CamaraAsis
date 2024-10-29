@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+    <!-- Formulario de Directivo -->
+    <div id="formDirectivo" class="Caja">
+        <form method="post" class="form">
+            {% csrf_token %}
+            <div class="form-field">
+                {{ form_directivo.Matricula.label_tag }}
+                {{ form_directivo.Matricula }}
+            </div>
+            <div class="form-field">
+                {{ form_directivo.contraseña.label_tag }}
+                {{ form_directivo.contraseña }}
+            </div>
+            <button type="submit" name="submit_directivo">Ingresar</button>
+        </form>
+    </div>
+{% endblock %}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'MenuInicio/css/Login.css' %}">
+{% endblock %}
+

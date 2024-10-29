@@ -1,0 +1,39 @@
+<body>
+
+    <h2>Editar Profesor</h2>
+    
+    <!-- Inicia el formulario para editar el profesor -->
+    <form method="POST" action="{% url 'EditarProfesor' profesor.idProfesor %}">
+        {% csrf_token %}
+        
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" value="{{ profesor.Nombre }}">
+        </div>
+        
+        <div>
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" value="{{ profesor.Apellidos }}">
+        </div>
+
+        <div>
+            <label for="matricula">Matrícula:</label>
+            <input type="text" id="matricula" name="matricula" value="{{ profesor.Matricula }}">
+        </div>
+
+        <div>
+            <label for="Contrasena">Contrasena:</label>
+            <input type="text" id="Contrasena" name="Contrasena" value="{{ profesor.Contrasena }}">
+        </div>
+
+        <div>
+            <label for="Correo">Correo:</label>
+            <input type="text" id="Correo" name="Correo" value="{{ profesor.Correo }}">
+        </div>
+        <!-- Botón para enviar los datos editados -->
+        <div>
+            <button type="submit">Guardar cambios</button>
+        </div>
+    </form>
+
+</body>

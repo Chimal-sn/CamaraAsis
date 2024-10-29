@@ -1,0 +1,78 @@
+body {
+    font-family: 'Ubuntu Mono', monospace;
+    background-color: #000000;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.Caja {
+    max-width: 300px;
+    min-height: 170px; /* Altura mínima del cuadro */
+    margin: 1rem;
+    padding: 5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-field {
+    margin-bottom: 2rem; /* Espacio debajo de cada campo */
+    width: 100%;
+    display: flex;
+    justify-content: flex-start; /* Alinea el contenido del campo hacia la izquierda */
+}
+
+.form-field input {
+    width: 100%;
+    max-width: 400px; /* Ajusta el ancho máximo del campo de entrada */
+    margin-left: 1rem; /* Espacio a la izquierda del campo */
+}
+
+.form-field label {
+    margin-right: 1rem; /* Espacio a la derecha de la etiqueta */
+    min-width: 100px; /* Ancho mínimo para alinear el texto de la etiqueta */
+    text-align: right; /* Alinea el texto de la etiqueta a la derecha */
+    font-size: 1.3rem;
+}
+
+/* Botón elegante */
+.form button {
+    background-color:#FFD700; /* Rojo elegante */
+    color: #000000; /* Texto en blanco */
+    border: none; /* Sin borde */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 0.75rem 1.5rem; /* Espaciado interno (superior/inferior y lateral) */
+    font-size: 1rem; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita para el texto */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: all 0.3s ease; /* Transición suave para efectos */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+    margin-top: 3rem; /* Ajuste del margen superior */
+}
+
+.form button:hover {
+    background-color: #aa9729; /* Rojo oscuro al pasar el mouse */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más intensa */
+    transform: translateY(-2px); /* Efecto de elevación */
+}
+
+.form button:active {
+    background-color: #900e3a; /* Rojo aún más oscuro al hacer clic */
+    transform: translateY(0); /* Eliminar el efecto de elevación */
+}
+
+
