@@ -1,13 +1,9 @@
+{% extends "Profesor/BaseProfesor.html" %}
+
 {% load static %}
 
-<!DOCTYPE html>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'MenuProfesor/Styles/Asistencia.css' %}">
-</head>
-
+{% block content %}
 <body>
     <h1>Asistencias de {{ profesor.Nombre }}</h1>
     <table>
@@ -53,4 +49,16 @@
     </div>
 </body>
 
-<script src="{% static 'MenuProfesor/Scripts/Asistencias.js' %}"></script> 
+{% endblock  %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'MenuProfesor/Styles/Asistencia.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'MenuProfesor/Scripts/Asistencias.js' %}"></script> 
+{% endblock %}
+
+
+
+

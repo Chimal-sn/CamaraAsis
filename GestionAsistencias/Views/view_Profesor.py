@@ -59,3 +59,9 @@ def justificacion_view(request, asistencia_id):
     profesor =  Profesor.objects.get(idProfesor=id)
     asistencias = DiaAsistencia.objects.filter(idProfesor = profesor)
     return render(request, 'Profesor/Asistencias.html',{'profesor': profesor, 'asistencias': asistencias,'form': form})
+
+
+def perfil_profesor(request):
+    id = request.session.get('user_id')
+    profesor =  Profesor.objects.get(idProfesor=id)
+    return render(request, "Profesor/Perfil.html",{'profesor' : profesor})

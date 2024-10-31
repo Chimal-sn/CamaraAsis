@@ -17,10 +17,12 @@ urlpatterns = [
     path('EditarProfesor/<int:id>/', view_Director.EditarProfesor, name = "EditarProfesor"),
     
     
+    
     path('HomeProfesor/', view_Profesor.HomeProfesor, name="HomeProfesor"),
     path('Asistencias/', view_Profesor.Asistencias, name = 'Asistencias'),
     path('justificar/<int:asistencia_id>/', view_Profesor.justificacion_view, name='justificacion_view'),
-    path('CerrarSesionProfesor', view_Profesor.CerrarSesionProfesor, name = "CerrarSesionProfesor"),
+    path('CerrarSesionProfesor/', view_Profesor.CerrarSesionProfesor, name = "CerrarSesionProfesor"),
+    path('PerfilProfesor/',view_Profesor.perfil_profesor, name= "PerfilProfesor"),
     
     
     path('upload/', views.upload_image, name='upload_image'),
