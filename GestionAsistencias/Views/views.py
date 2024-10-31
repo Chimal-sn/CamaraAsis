@@ -66,7 +66,7 @@ def IniciarSesion(request):
                     except Administrador.DoesNotExist:
                         messages.error(request,"Matricula o Contraseña incorrecta")
         
-    return render(request, 'IniciarSesion.html', {'form_directivo': form_directivo})
+    return render(request, 'Inicio/IniciarSesion.html', {'form_directivo': form_directivo})
 
 
 
@@ -112,7 +112,7 @@ def upload_image(request):
 
 
 def lista(request):
-    return render(request, 'lista.html')
+    return render(request, 'Inicio/lista.html')
 
 import face_recognition
 import numpy as np

@@ -35,7 +35,13 @@ def Asistencias(request):
     
     return render(request, 'Profesor/Asistencias.html',{'profesor': profesor, 'asistencias': asistencias_pro,'form': form})
 
-
+def CerrarSesionProfesor(request):
+    # Eliminar datos específicos de la sesión
+    if 'user_id' in request.session:
+        del request.session['user_id']
+    if 'user_rol' in request.session:   
+        del request.session['user_rol']
+    return redirect("Inicio")
 
 def justificacion_view(request, asistencia_id):
     asistencia = get_object_or_404(DiaAsistencia, id=asistencia_id)

@@ -1,0 +1,71 @@
+nav {
+    width: 200px; /* Ancho de la barra de navegación */
+    height: 100vh; /* Altura completa de la pantalla */
+    background-color: #000; /* Fondo negro */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* Distribuye espacio entre los elementos */
+    padding: 20px 0;
+    position: fixed; /* Fija el nav a la izquierda */
+    top: 0;
+    left: 0;
+    border-right: 2px solid #fff;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+nav ul li {
+    margin: 20px 0;
+    text-align: center;
+    padding-left: 10px;
+}
+
+.navegacion {
+    border-left: 2px solid #fff; /* Línea izquierda */
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 22px;
+    font-family: 'Ubuntu Mono', monospace;
+}
+
+nav ul li a:hover {
+    color: #ccc; /* Cambia el color al pasar el mouse */
+}
+
+.logout-button {
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000;
+    border-radius: 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    align-self: center; /* Centra el botón horizontalmente */
+}
+
+
+.logout-button:hover {
+    background-color: #ddd; /* Color de fondo al pasar el mouse */
+}
+
+.content {
+    margin-left: 200px; /* Empuja el contenido principal para que no esté cubierto por el nav */
+    padding: 20px;
+}
+
+.navegacion:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Añadir un efecto hover */
+    border-radius: 10px; /* Redondeado en hover */
+}
+
+.boton_salir{
+    padding:  100px 20px;
+}

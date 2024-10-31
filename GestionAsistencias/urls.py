@@ -20,6 +20,7 @@ urlpatterns = [
     path('HomeProfesor/', view_Profesor.HomeProfesor, name="HomeProfesor"),
     path('Asistencias/', view_Profesor.Asistencias, name = 'Asistencias'),
     path('justificar/<int:asistencia_id>/', view_Profesor.justificacion_view, name='justificacion_view'),
+    path('CerrarSesionProfesor', view_Profesor.CerrarSesionProfesor, name = "CerrarSesionProfesor"),
     
     
     path('upload/', views.upload_image, name='upload_image'),
