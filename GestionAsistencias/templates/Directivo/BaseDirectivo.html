@@ -1,20 +1,46 @@
-
-<nav>
-    <ul>
-        <li>
-            <a href="{% url "HomeDirectivo" %}">Inicio</a>
-        </li>
-        <li>
-            <a href="{% url "RegistrarProfesor" %}">Registrar Profesor</a>
-        </li>
-        <li>
-            <a href="{% url "Periodo" %}">Periodo</a>
-        </li>
-            
-    </ul>
-</nav>
+{% load static %}
 
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Inicio Administrador{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/Navegador.css' %}">
+    {% block extra_css %}
     
-{% endblock  %}
+    {% endblock %}
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class = "navegacion">
+                <a href="{% url "HomeDirectivo" %}">Inicio</a>
+            </li>
+            <li class = "navegacion">
+                <a href="{% url "RegistrarProfesor" %}">Registrar Profesor</a>
+            </li>
+            <li class = "navegacion">
+                <a href="{% url "Periodo" %}">Periodo</a>
+            </li>
+            <li class = "navegacion">
+                <a href="{% url "GestionProfesores" %}">Gestion de Profesores</a>
+            </li>
+            GestionProfesores
+            <li class = "boton_salir">
+                <a href="{% url "CerrarSesionDirectivo" %}" class = "logout-button">Salir</a>
+            </li>
+                
+        </ul>
+    </nav>    
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <!-- Pie de página -->
+    </footer>
+    {% block extra_js %}
+        <!-- Aquí puedes incluir scripts por defecto o en blanco -->
+    {% endblock %}
+</body>

@@ -4,9 +4,9 @@ from .models import Profesor, Justificacion, Directivos, Administrador
 from django.core.exceptions import ValidationError
 
 class IngresarNuevoProfesor(forms.Form):
-    Nombre = forms.CharField(label="Nombre del profesor", max_length=50)
-    Apellidos = forms.CharField(label="Apellidos del profesor", max_length=50)
-    Contrasena = forms.CharField(label="Contrasena del profesor", max_length=50, widget=forms.PasswordInput())
+    class Meta:
+        model = Profesor
+        fields = ['Nombre', 'Apellidos', 'Matricula', 'Contrasena']
 
 
 class DirectivoLoginForm(forms.Form):

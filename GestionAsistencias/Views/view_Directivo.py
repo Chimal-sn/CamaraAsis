@@ -93,7 +93,9 @@ def  EditarProfesor (request, id):
         profesor.Nombre = request.POST.get('nombre')
         profesor.Apellido = request.POST.get('apellido')
         profesor.Matricula = request.POST.get('matricula')
-        
+        profesor.Correo  = request.POST.get('Correo')
+        profesor.Contrasena  = request.POST.get('Contrasena')
+
         # Guarda los cambios
         profesor.save()
         
@@ -101,6 +103,17 @@ def  EditarProfesor (request, id):
         return redirect('GestionProfesores')
 
     # Si es un método GET, muestra el formulario con los datos del profesor
-    return render(request, 'Directivo/EditarProfesor.html', {'profesor': profesor})
+    return redirect('GestionProfesores')
+
+
+def CerrarSesionDirectivo(request):
+    # Eliminar datos específicos de la sesión
+    if 'user_id' in request.session:
+        del request.session['user_id']
+    if 'user_rol' in request.session:   
+        del request.session['user_rol']
+    return redirect("Inicio")
+
+
 
 

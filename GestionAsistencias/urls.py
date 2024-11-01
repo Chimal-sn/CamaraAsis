@@ -1,5 +1,5 @@
 from django.urls import path
-from .Views import views, view_Profesor, view_Director, view_Administrador
+from .Views import view_Directivo, views, view_Profesor, view_Administrador
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -9,13 +9,13 @@ urlpatterns = [
     path('',views.index, name = 'Inicio'),
     
     
-    path('Ingresar/',view_Director.crear_profesor, name = "RegistrarProfesor"),
-    path('homedirectivo/', view_Director.CasaDirectivo, name= "HomeDirectivo"),
-    path('Periodo/', view_Director.periodo, name = "Periodo"),  
-    path('GestionProfesores/', view_Director.GestionProfesores, name = "GestionProfesores"),   
-    path('EliminarProfesor/<int:id>/',  view_Director.BorrarProfesor, name = "EliminarProfesor"),
-    path('EditarProfesor/<int:id>/', view_Director.EditarProfesor, name = "EditarProfesor"),
-    
+    path('Ingresar/',view_Directivo.crear_profesor, name = "RegistrarProfesor"),
+    path('homedirectivo/', view_Directivo.CasaDirectivo, name= "HomeDirectivo"),
+    path('Periodo/', view_Directivo.periodo, name = "Periodo"),  
+    path('GestionProfesores/', view_Directivo.GestionProfesores, name = "GestionProfesores"),   
+    path('EliminarProfesor/<int:id>',  view_Directivo.BorrarProfesor, name = "EliminarProfesor"),
+    path('EditarProfesor/<int:id>', view_Directivo.EditarProfesor, name = "EditarProfesor"),
+    path('CerrarSesionDirectivo/', view_Directivo.CerrarSesionDirectivo, name = "CerrarSesionDirectivo"),
     
     
     path('HomeProfesor/', view_Profesor.HomeProfesor, name="HomeProfesor"),
