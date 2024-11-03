@@ -37,6 +37,9 @@ class PeriodoEscolar(models.Model):
     FechaInicio = models.DateTimeField()
     FechaFin = models.DateTimeField()
     
+    def __str__(self):
+        return self.Nombre
+    
 class Horario(models.Model):
     idHorario = models.BigAutoField(primary_key=True, auto_created=True, serialize=False)
     Lunes = models.TimeField(null=True, blank=True)

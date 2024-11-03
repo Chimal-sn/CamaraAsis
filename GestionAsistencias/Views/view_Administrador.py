@@ -73,7 +73,7 @@ def crear_directivo(request):
     else:
         form = DirectivoForm()
     
-    return render(request, 'Administrador/CrearAdministrador.html', {'form': form})
+    return redirect('GestionarDirectivos')
 
 
 def ReporteAsis(request):

@@ -6,32 +6,36 @@
 
 
 
-    <h2>Profesores</h2>
+    <h2>Horario</h2>
 
     <div>
         <table>
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Matrícula</th>
-                    <th>Horarios</th>
-                    <th>Eliminar</th>
+                    <th>Lunes</th>
+                    <th>Martes</th>
+                    <th>Miercoles</th>
+                    <th>Jueves</th>
+                    <th>Viernes</th>
+                    <th>Periodo</th>
+                    <th>Eliminar</th> 
                     <th>Actualizar</th>
                 </tr>
             </thead>
             <tbody>
-                {% for profesor in profesores %}
+                {% for horario in horarios %}
                     <tr>
-                        <td>{{ profesor.Nombre }}</td>
-                        <td>{{ profesor.Apellidos }}</td>
-                        <td>{{ profesor.Matricula }}</td>
-                        <td> <a href="{% url 'GestionHorarios' profesor.idProfesor %}">Ver</a> </td>
+                        <td>{{ horario.Lunes }}</td>
+                        <td>{{ horario.Martes }}</td>
+                        <td>{{ horario.Miercoles }}</td>
+                        <td>{{ horario.Jueves }}</td>
+                        <td>{{ horario.Viernes }}</td>
+                        <td>{{ horario.idPeriodo }}</td>
                         <td>
-                            <a href="{% url 'EliminarProfesor' profesor.idProfesor %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>
+                            <a href="{% url 'EliminarHorario' horario.idHorario profesor.idProfesor %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>
                         </td>
                         <td>
-                            <button onclick="openModal({{ profesor.idProfesor }}, '{{ profesor.Nombre }}', '{{ profesor.Apellidos }}', '{{ profesor.Matricula }}', '{{ profesor.Contrasena }}', '{{ profesor.Correo }}')">Actualizar</button>
+                            <button onclick="openModal({{ horario.idHorario }}, '{{ horario.Lunes }}', '{{ horario.Martes }}', '{{ horario.Miercoles }}', '{{ horario.Jueves }}', '{{ horario.Viernes }}')">Actualizar</button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -40,7 +44,7 @@
     </div>
 
     <div>
-        <button onclick = "abrirCrear()">Ingresar Profesor</button>
+        <button onclick = "abrirCrear()">Ingresar Horario</button>
     </div>
 
     <div id="editModal" class="modal" style="display: none;">
@@ -87,39 +91,46 @@
     <div div id="CrearModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="CerrarModalCrear()">&times;</span>
-            <h2>Registar Profesor</h2>
-            <form method="POST" action="{% url 'RegistrarProfesor' %}">
+            <h2>Crear Horario</h2>
+            <form method="POST" action="{% url 'CrearHorario' profesor.idProfesor %}">
                 {% csrf_token %}
                 
     
                 <div>
-                    <label for="nombre">Nombre:</label>
-                    {{ form.Nombre }}
+                    <label for="Lunes">Lunes:</label>
+                    {{ form.Lunes }}
                 </div>
     
                 <div>
-                    <label for="apellidos">Apellido:</label>
-                    {{ form.Apellidos }}
+                    <label for="Martes">Martes:</label>
+                    {{ form.Martes }}
                 </div>
     
                 <div>
-                    <label for="matricula">Matrícula:</label>
-                    {{ form.Matricula }}
+                    <label for="Miercoles">Miercoles:</label>
+                    {{ form.Miercoles }}
                     <!-- Para mostrar el error específico de matrícula -->
                 </div>
     
                 <div>
-                    <label for="contrasena">Contraseña:</label>
-                    {{ form.Contrasena }}
+                    <label for="Jueves">Jueves:</label>
+                    {{ form.Jueves }}
                 </div>
     
                 <div>
-                    <label for="correo">Correo:</label>
-                    {{ form.Correo }}
+                    <label for="Viernes">Viernes:</label>
+                    {{ form.Viernes }}
                 </div>
+
+                <div>
+                    <label for="Periodo">Periodo:</label>
+                    {{ form.idPeriodo }}
+                </div>
+
+                
     
                 <div>
-                    <button type="submit">Crear Profesor</button>
+                    <button type="submit">Crear Horario</button>
                 </div>
             </form>
         </div>

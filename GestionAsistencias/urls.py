@@ -16,7 +16,11 @@ urlpatterns = [
     path('EliminarProfesor/<int:id>',  view_Directivo.BorrarProfesor, name = "EliminarProfesor"),
     path('EditarProfesor/<int:id>', view_Directivo.EditarProfesor, name = "EditarProfesor"),
     path('CerrarSesionDirectivo/', view_Directivo.CerrarSesionDirectivo, name = "CerrarSesionDirectivo"),
-    
+    path('GestionHorarios/<int:id>', view_Directivo.GestionHorarios, name=  "GestionHorarios"),
+    path('EliminarHorario/<int:id>/<int:idPro>',  view_Directivo.EliminarHorario, name = "EliminarHorario"),
+    path('CrearHorario/<int:id>', view_Directivo.CrearHorario, name = "CrearHorario"  ),
+
+
     
     path('HomeProfesor/', view_Profesor.HomeProfesor, name="HomeProfesor"),
     path('Asistencias/', view_Profesor.Asistencias, name = 'Asistencias'),
