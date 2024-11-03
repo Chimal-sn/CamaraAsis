@@ -15,6 +15,8 @@
                     <th>Nombre</th>
                     <th>Apellidos</th>
                     <th>Matrícula</th>
+                    <th>Correo</th>
+                    <th>Contraseña</th>
                     <th>Horarios</th>
                     <th>Eliminar</th>
                     <th>Actualizar</th>
@@ -26,6 +28,8 @@
                         <td>{{ profesor.Nombre }}</td>
                         <td>{{ profesor.Apellidos }}</td>
                         <td>{{ profesor.Matricula }}</td>
+                        <td>{{ profesor.Correo }}</td>
+                        <td>{{ profesor.Contrasenas }}</td>
                         <td> <a href="{% url 'GestionHorarios' profesor.idProfesor %}">Ver</a> </td>
                         <td>
                             <a href="{% url 'EliminarProfesor' profesor.idProfesor %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>

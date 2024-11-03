@@ -141,4 +141,25 @@ def CrearHorario(request,id):
     return redirect('GestionHorarios',id = id)
 
 
+def EditarHorario(request, id):
+    # Obtener el horario que se va a editar
+    horario = get_object_or_404(Horario, idHorario=id)
+    idPro =  horario.idProfesor.idProfesor
+
+    if request.method == 'POST':
+        # Crear una instancia del formulario con los datos del POST
+        form = IngresarNuevoHorario(request.POST, instance=horario)
+        
+        if form.is_valid():
+            # Guardar la instancia actualizada
+            form.save()
+            return redirect('GestionHorarios',id = idPro)  # Redirigir a la vista de gestión de horarios
+    else:
+        # Si no es una solicitud POST, se muestra el formulario con los datos existentes
+        return redirect('GestionHorarios',id = idPro) 
+
+    # Renderizar la plantilla con el formulario
+    return redirect('GestionHorarios',id = idPro)
+
+
 

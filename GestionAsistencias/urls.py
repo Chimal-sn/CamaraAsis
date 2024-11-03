@@ -19,6 +19,7 @@ urlpatterns = [
     path('GestionHorarios/<int:id>', view_Directivo.GestionHorarios, name=  "GestionHorarios"),
     path('EliminarHorario/<int:id>/<int:idPro>',  view_Directivo.EliminarHorario, name = "EliminarHorario"),
     path('CrearHorario/<int:id>', view_Directivo.CrearHorario, name = "CrearHorario"  ),
+    path('GestionHorarios/EditarHorario/<int:id>',view_Directivo.EditarHorario,  name = "EditarHorario"),
 
 
     
