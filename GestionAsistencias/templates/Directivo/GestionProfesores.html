@@ -29,7 +29,7 @@
                         <td>{{ profesor.Apellidos }}</td>
                         <td>{{ profesor.Matricula }}</td>
                         <td>{{ profesor.Correo }}</td>
-                        <td>{{ profesor.Contrasenas }}</td>
+                        <td>{{ profesor.Contrasena }}</td>
                         <td> <a href="{% url 'GestionHorarios' profesor.idProfesor %}">Ver</a> </td>
                         <td>
                             <a href="{% url 'EliminarProfesor' profesor.idProfesor %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>

@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from functools import wraps
-from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario
+from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario, PeriodoForm
 from ..models import Directivos, Profesor, DiaAsistencia, Horario, PeriodoEscolar
 from django.contrib import messages
 
@@ -160,6 +160,51 @@ def EditarHorario(request, id):
 
     # Renderizar la plantilla con el formulario
     return redirect('GestionHorarios',id = idPro)
+
+
+def GestionPeriodos(request):
+    periodos = PeriodoEscolar.objects.all()
+    form = PeriodoForm()
+    
+    return render(request, 'Directivo/GestionPeriodos.html', {'periodos': periodos, 'form': form})
+
+
+def EliminarPeriodo (request,id):
+    # Obtener el periodo que se va a eliminar
+    periodo = get_object_or_404(PeriodoEscolar, idPeriodo=id)
+    periodo.delete()
+    return redirect('GestionPeriodos')
+
+
+def CrearPeriodo (request):
+    if request.method == 'POST':
+        # Crear una instancia del formulario con los datos del POST
+        form = PeriodoForm(request.POST)
+        if  form.is_valid():
+            # Guardar la instancia actualizada
+            form.save()
+            return redirect('GestionPeriodos')
+        else:
+            return redirect('GestionPeriodos')
+    return redirect('GestionPeriodos')
+
+def  EditarPeriodo (request,id):
+    # Obtener el periodo que se va a editar
+    periodo = get_object_or_404(PeriodoEscolar, idPeriodo=id)
+    
+    if  request.method == 'POST':
+        # Crear una instancia del formulario con los datos del POST
+        form = PeriodoForm(request.POST, instance=periodo)
+        
+        if  form.is_valid():
+            # Guardar la instancia actualizada
+            form.save()
+            return redirect('GestionPeriodos')
+    else:
+        return redirect('GestionPeriodos')
+        
+            
+
 
 
 

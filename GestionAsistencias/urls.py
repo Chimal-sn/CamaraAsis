@@ -20,6 +20,11 @@ urlpatterns = [
     path('EliminarHorario/<int:id>/<int:idPro>',  view_Directivo.EliminarHorario, name = "EliminarHorario"),
     path('CrearHorario/<int:id>', view_Directivo.CrearHorario, name = "CrearHorario"  ),
     path('GestionHorarios/EditarHorario/<int:id>',view_Directivo.EditarHorario,  name = "EditarHorario"),
+    path('GestionPeriodos/', view_Directivo.GestionPeriodos,  name = "GestionPeriodos"),
+    path('EliminarPeriodo/<int:id>', view_Directivo.EliminarPeriodo, name = "EliminarPeriodo"),
+    path('CrearPeriodo',view_Directivo.CrearPeriodo, name =  "CrearPeriodo"),
+    path('EditarPeriodo/<int:id>',view_Directivo.EditarPeriodo, name =  "EditarPeriodo"),
+
 
 
     
@@ -28,6 +33,7 @@ urlpatterns = [
     path('justificar/<int:asistencia_id>/', view_Profesor.justificacion_view, name='justificacion_view'),
     path('CerrarSesionProfesor/', view_Profesor.CerrarSesionProfesor, name = "CerrarSesionProfesor"),
     path('PerfilProfesor/',view_Profesor.perfil_profesor, name= "PerfilProfesor"),
+    
     
     
     path('upload/', views.upload_image, name='upload_image'),

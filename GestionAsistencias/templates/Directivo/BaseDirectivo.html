@@ -19,16 +19,18 @@
                 <a href="{% url "HomeDirectivo" %}">Inicio</a>
             </li>
             <li class = "navegacion">
-                <a href="{% url "Periodo" %}">Periodo</a>
+                <a href="{% url "Periodo" %}">Reporte</a>
             </li>
             <li class = "navegacion">
                 <a href="{% url "GestionProfesores" %}">Gestion de Profesores</a>
             </li>
-            GestionProfesores
+            <li class = "navegacion">
+                <a href="{% url "GestionPeriodos" %}">Gestion de Periodos</a>
+            </li>
             <li class = "boton_salir">
                 <a href="{% url "CerrarSesionDirectivo" %}" class = "logout-button">Salir</a>
             </li>
-                
+
         </ul>
     </nav>    
     <main class="content">

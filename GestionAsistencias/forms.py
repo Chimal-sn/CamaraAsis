@@ -1,7 +1,20 @@
 from django import forms 
 from ftplib import MAXLINE
-from .models import Profesor, Justificacion, Directivos, Administrador,Horario
+from .models import Profesor, Justificacion, Directivos, Administrador,Horario,PeriodoEscolar
 from django.core.exceptions import ValidationError
+
+
+
+
+class PeriodoForm(forms.ModelForm):
+    class Meta:
+        model = PeriodoEscolar
+        fields = ['Nombre', 'FechaInicio', 'FechaFin']
+        widgets = {
+            'FechaInicio': forms.DateInput(attrs={'type': 'date'}),
+            'FechaFin': forms.DateInput(attrs={'type': 'date'}),
+        }
+        
 
 class IngresarNuevoProfesor(forms.ModelForm):
     class Meta:

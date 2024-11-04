@@ -32,10 +32,10 @@ class Profesor(models.Model):
         return f"{self.Nombre} {self.Apellidos}"
 
 class PeriodoEscolar(models.Model):
-    idPeriodo = models.BigAutoField(primary_key=True, serialize=False)
+    idPeriodo = models.BigAutoField(primary_key=True, auto_created=True, serialize=False)
     Nombre = models.CharField(max_length=60)
-    FechaInicio = models.DateTimeField()
-    FechaFin = models.DateTimeField()
+    FechaInicio = models.DateField()
+    FechaFin = models.DateField()
     
     def __str__(self):
         return self.Nombre
