@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from functools import wraps
 from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario, PeriodoForm
-from ..models import Directivos, Profesor, DiaAsistencia, Horario, PeriodoEscolar
+from ..models import Directivos, Profesor, DiaAsistencia, Horario, PeriodoEscolar, Justificacion
 from django.contrib import messages
 
 
@@ -204,6 +204,41 @@ def  EditarPeriodo (request,id):
         return redirect('GestionPeriodos')
         
             
+def Justificante (request):
+    
+    id = request.session.get('user_id')
+    
+    directivo =  Directivos.objects.get(idDirectivos=id)
+    profesores = Profesor.objects.filter(idDirectivos = directivo.idDirectivos)
+    horarios =  Horario.objects.filter(idProfesor__in = profesores)
+
+    asistencias = DiaAsistencia.objects.filter(idHorario__in = horarios)
+    justificantes  = Justificacion.objects.filter(idDiaAsistencia__in=asistencias)
+    
+    for justificante in justificantes:
+        profesor = Profesor.objects.get(idProfesor=justificante.idDiaAsistencia.idHorario.idProfesor.idProfesor)    
+        justificante.profesor = profesor.Matricula
+    
+    return render (request, 'Directivo/Justificantes.html',{'justificantes':justificantes})
+
+
+    
+def AceptarJustificante (request, id):
+    
+    justificante = get_object_or_404(Justificacion, idJustificacion=id)
+    justificante.estado = 'Aprobado'
+    justificante.save()
+    asistencia = get_object_or_404(DiaAsistencia, id =  justificante.idDiaAsistencia.id)
+    asistencia.Tipo = 'Asistencia';
+    asistencia.save()
+    
+    return redirect ('Justificantes')
+    
+
+    
+    
+    
+
 
 
 

@@ -29,7 +29,7 @@ class Profesor(models.Model):
     imagen_rostro = models.CharField(max_length=255, null=True, blank=True)
     
     def __str__(self):
-        return f"{self.Nombre} {self.Apellidos}"
+        return self.Matricula
 
 class PeriodoEscolar(models.Model):
     idPeriodo = models.BigAutoField(primary_key=True, auto_created=True, serialize=False)
@@ -55,6 +55,10 @@ class DiaAsistencia(models.Model):
     fecha_y_hora = models.DateTimeField(default=timezone.now)
     Tipo = models.CharField(max_length=45)
     idHorario =  models.ForeignKey(Horario, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.fecha_y_hora.strftime('%Y-%m-%d %H:%M:%S')
+    
     
 
 class Justificacion(models.Model):

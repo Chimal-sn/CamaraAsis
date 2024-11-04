@@ -68,9 +68,9 @@ SET idDirectivos = 2
 WHERE idDirectivos = 4;
 
 
-UPDATE gestionasistencias_horario
-SET idHorario = 1
-WHERE idHorario = 2;
+UPDATE gestionasistencias_diaasistencia
+SET Tipo = "Retardo"
+WHERE id = 4;
 
 UPDATE gestionasistencias_profesor
 SET Matricula = "P55"
@@ -81,4 +81,18 @@ SET nombre = "alberg"
 WHERE idProfesor = 4;
 
 
-delete from  gestionasistencias_diaasistencia where id = 6;
+UPDATE gestionasistencias_diaasistencia
+SET Tipo = "Retardo"
+WHERE id = 4;
+
+delete from  gestionasistencias_justificacion where idJustificacion = 1;
+
+delete from  gestionasistencias_diaasistencia where id = 14;
+
+select *from gestionasistencias_justificacion;
+
+
+delete from  gestionasistencias_justificacion where idDiaAsistencia_id = 14;
+
+
+delete from  gestionasistencias_justificacion where idJustificacion = 4;

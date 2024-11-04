@@ -24,8 +24,11 @@ urlpatterns = [
     path('EliminarPeriodo/<int:id>', view_Directivo.EliminarPeriodo, name = "EliminarPeriodo"),
     path('CrearPeriodo',view_Directivo.CrearPeriodo, name =  "CrearPeriodo"),
     path('EditarPeriodo/<int:id>',view_Directivo.EditarPeriodo, name =  "EditarPeriodo"),
+    path('Justificantes/', view_Directivo.Justificante, name=  "Justificantes"),
+    path('AceptarJustificante/<int:id>', view_Directivo.AceptarJustificante, name=   "AceptarJustificante"),
 
 
+    path('backup_database',views.backup_database, name = "backup_database"),
 
     
     path('HomeProfesor/', view_Profesor.HomeProfesor, name="HomeProfesor"),

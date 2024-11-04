@@ -12,6 +12,8 @@
                 <th>Nombre</th>
                 <th>Apellidos</th>
                 <th>Matrícula</th>
+                <th>Correo</th>
+                <th>Contraseña</th>
                 <th>Eliminar</th>
                 <th>Actualizar</th>
             </tr>
@@ -22,8 +24,10 @@
                     <td>{{ directivo.Nombre }}</td>
                     <td>{{ directivo.Apellidos }}</td>
                     <td>{{ directivo.Matricula }}</td>
+                    <td>{{ directivo.Correo }}</td>
+                    <td>{{ directivo.Contrasena }}</td>
                     <td>
-                        <a href="{% url 'EliminarDirectivo' directivo.idDirectivos %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>
+                        <a href="{% url 'EliminarDirectivo' directivo.idDirectivos %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este directivo?')">Eliminar</a>
                     </td>
                     <td>
                         <button onclick="openModal({{ directivo.idDirectivos }}, '{{ directivo.Nombre }}', '{{ directivo.Apellidos }}', '{{ directivo.Matricula }}', '{{ directivo.Contrasena }}', '{{ directivo.Correo }}')">Actualizar</button>

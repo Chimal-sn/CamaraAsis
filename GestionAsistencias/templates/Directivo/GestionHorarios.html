@@ -32,7 +32,7 @@
                         <td>{{ horario.Viernes }}</td>
                         <td>{{ horario.idPeriodo }}</td>
                         <td>
-                            <a href="{% url 'EliminarHorario' horario.idHorario profesor.idProfesor %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>
+                            <a href="{% url 'EliminarHorario' horario.idHorario profesor.idProfesor %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este horario?')">Eliminar</a>
                         </td>
                         <td>
                             <button onclick="openModal({{ horario.idHorario }}, '{{ horario.Lunes|time:"H:i" }}', '{{ horario.Martes|time:"H:i" }}', '{{ horario.Miercoles|time:"H:i" }}', '{{ horario.Jueves|time:"H:i" }}', '{{ horario.Viernes|time:"H:i" }}','{{horario.idPeriodo}}')">Actualizar</button>
