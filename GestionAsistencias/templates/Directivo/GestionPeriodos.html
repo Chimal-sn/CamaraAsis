@@ -53,7 +53,7 @@
     <div id="editModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Editar Directivo</h2>
+            <h2>Editar Periodo</h2>
             
             <!-- Formulario de edición -->
             <form method="POST" action="{% url 'EditarPeriodo' 0 %}" id="editForm" onsubmit="return validateMatricula()">
@@ -117,7 +117,7 @@
 
     
     {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'MenuDirectivo/Styles/GestionProfesores.css' %}">
+        <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/GestionDirectivos.css' %}">
     {% endblock %}
 
 {% endblock %}

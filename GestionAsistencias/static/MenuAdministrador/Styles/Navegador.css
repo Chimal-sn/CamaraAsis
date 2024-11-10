@@ -1,16 +1,17 @@
 nav {
-    width: 200px; /* Ancho de la barra de navegación */
-    height: 100vh; /* Altura completa de la pantalla */
-    background-color: #000; /* Fondo negro */
+    width: 200px;
+    height: 100vh;
+    background-color: #000;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between; /* Distribuye espacio entre los elementos */
+    justify-content: space-between;
     padding: 20px 0;
-    position: fixed; /* Fija el nav a la izquierda */
+    position: fixed;
     top: 0;
     left: 0;
-    border-right: 2px solid #fff;
+    border-right: 1px solid rgba(255, 255, 255, 0.15); /* Línea delgada y sutil */
+    box-shadow: 2px 0 8px rgba(255, 255, 255, 0.5); /* Sombra suave */
 }
 
 nav ul {
@@ -22,50 +23,69 @@ nav ul {
 nav ul li {
     margin: 20px 0;
     text-align: center;
-    padding-left: 10px;
 }
 
 .navegacion {
-    border-left: 2px solid #fff; /* Línea izquierda */
+    padding-left: 15px;
+    
+    transition: border-left-color 0.3s ease, transform 0.3s ease;
 }
 
 nav ul li a {
-    color: #fff;
+    color: #f5f5f5;
     text-decoration: none;
-    font-size: 22px;
+    font-size: 18px;
     font-family: 'Ubuntu Mono', monospace;
+    padding: 10px 15px;
+    transition: color 0.3s ease, transform 0.2s ease;
+    display: block;
+    position: relative;
+}
+
+nav ul li a::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #f5f5f5; /* Color blanco */
+    transition: width 0.3s ease; /* Línea animada */
 }
 
 nav ul li a:hover {
-    color: #ccc; /* Cambia el color al pasar el mouse */
+    color: #ccc;
+}
+
+nav ul li a:hover::before {
+    width: 100%; /* Línea subrayada en hover */
 }
 
 .logout-button {
-    padding: 10px 20px;
-    background-color: #fff;
+    padding: 10px 25px;
+    background-color: #f5f5f5;
     color: #000;
-    border-radius: 20px;
+    border-radius: 25px;
     text-align: center;
     text-decoration: none;
-    font-size: 16px;
-    align-self: center; /* Centra el botón horizontalmente */
+    font-size: 15px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-
 .logout-button:hover {
-    background-color: #ddd; /* Color de fondo al pasar el mouse */
+    background-color: #e0e0e0;
+    transform: translateY(-2px); /* Suave elevación en hover */
 }
 
 .content {
-    margin-left: 200px; /* Empuja el contenido principal para que no esté cubierto por el nav */
-    padding: 20px;
+    margin-left: 200px;
+    padding: 30px;
+    background-color: #000;
+    color: #f5f5f5;
 }
 
 .navegacion:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Añadir un efecto hover */
-    border-radius: 10px; /* Redondeado en hover */
-}
-
-.boton_salir{
-    padding:  100px 20px;
+    background-color: rgba(255, 255, 255, 0.05); /* Sutil fondo en hover */
+    border-radius: 10px;
 }
