@@ -1,6 +1,8 @@
+from datetime import datetime
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from functools import wraps
-from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario, PeriodoForm
+from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario, PeriodoForm, PeriodoEditar
 from ..models import Directivos, Profesor, DiaAsistencia, Horario, PeriodoEscolar, Justificacion
 from django.contrib import messages
 
@@ -165,8 +167,8 @@ def EditarHorario(request, id):
 def GestionPeriodos(request):
     periodos = PeriodoEscolar.objects.all()
     form = PeriodoForm()
-    
-    return render(request, 'Directivo/GestionPeriodos.html', {'periodos': periodos, 'form': form})
+    form2 = PeriodoEditar()
+    return render(request, 'Directivo/GestionPeriodos.html', {'periodos': periodos, 'form': form, 'form2': form2})
 
 
 def EliminarPeriodo (request,id):
@@ -187,6 +189,8 @@ def CrearPeriodo (request):
         else:
             return redirect('GestionPeriodos')
     return redirect('GestionPeriodos')
+
+
 
 def  EditarPeriodo (request,id):
     # Obtener el periodo que se va a editar
@@ -236,7 +240,38 @@ def AceptarJustificante (request, id):
     
 
     
+
+def validar_nombre(request):
+    nombre = request.GET.get('nombre')
+    directivo_id = request.GET.get('id')  # ID del directivo que estamos editando
+    print (directivo_id)
+    if nombre:
+        # Excluir el `directivo_id` solo en `Directivos`
+        if directivo_id:
+            existe = (
+                PeriodoEscolar.objects.filter(Nombre=nombre).exclude(idPeriodo=directivo_id).exists()
+            )
+        else:
+            existe = (
+                PeriodoEscolar.objects.filter(Nombre=nombre).exists()
+            )
+        return JsonResponse({'existe': existe})
     
+    # Respuesta si el `correo` no se proporciona
+    return JsonResponse({'error': 'Correo no proporcionado'}, status=400)
+
+
+def validar_fechas(request):
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_final = request.GET.get('fecha_final')
+
+    # Validar que ambas fechas están presentes
+    try:
+        es_valido = fecha_inicio <= fecha_final
+        return JsonResponse({'es_valido': es_valido})
+    except ValueError:
+            # Si hay un error de formato, retorna que no es válido
+        return JsonResponse({'es_valido': False})
     
 
 

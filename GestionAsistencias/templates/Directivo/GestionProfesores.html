@@ -5,45 +5,28 @@
 {% load static %}
 
 
+<div class="contenido">
 
     <h2>Profesores</h2>
 
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Matrícula</th>
-                    <th>Correo</th>
-                    <th>Contraseña</th>
-                    <th>Horarios</th>
-                    <th>Eliminar</th>
-                    <th>Actualizar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for profesor in profesores %}
-                    <tr>
-                        <td>{{ profesor.Nombre }}</td>
-                        <td>{{ profesor.Apellidos }}</td>
-                        <td>{{ profesor.Matricula }}</td>
-                        <td>{{ profesor.Correo }}</td>
-                        <td>{{ profesor.Contrasena }}</td>
-                        <td> <a href="{% url 'GestionHorarios' profesor.idProfesor %}">Ver</a> </td>
-                        <td>
-                            <a href="{% url 'EliminarProfesor' profesor.idProfesor %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>
-                        </td>
-                        <td>
-                            <button onclick="openModal({{ profesor.idProfesor }}, '{{ profesor.Nombre }}', '{{ profesor.Apellidos }}', '{{ profesor.Matricula }}', '{{ profesor.Contrasena }}', '{{ profesor.Correo }}')">Actualizar</button>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="grid-container">
+        {% for profesor in profesores %}
+            <div class="grid-item">
+                <h4>{{ profesor.Nombre }} {{ profesor.Apellidos }}</h4>
+                <p><strong>Matrícula:</strong> {{ profesor.Matricula }}</p>
+                <p><strong>Correo:</strong> {{ profesor.Correo }}</p>
+                <p><strong>Contraseña:</strong> {{ profesor.Contrasena }}</p>
+                <div class="grid-actions">
+                    <a href="{% url 'GestionHorarios' profesor.idProfesor %}" class="view-btn">Ver Horarios</a>
+                    <a href="{% url 'EliminarProfesor' profesor.idProfesor %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>
+                    <button class="update-btn" onclick="openModal({{ profesor.idProfesor }}, '{{ profesor.Nombre }}', '{{ profesor.Apellidos }}', '{{ profesor.Matricula }}', '{{ profesor.Contrasena }}', '{{ profesor.Correo }}')">Actualizar</button>
+                </div>
+            </div>
+        {% endfor %}
     </div>
+    
 
-    <div>
+    <div class="buttons-container">
         <button onclick = "abrirCrear()">Ingresar Profesor</button>
     </div>
 
@@ -129,6 +112,8 @@
         </div>
     </div>
 
+</div>
+
     <script>
         const existingMatriculas = [
             {% for directivo in directivos %}
@@ -144,7 +129,7 @@
     </script>
     
     {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'MenuDirectivo/Styles/GestionProfesores.css' %}">
+        <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/GestionDirectivos.css' %}">
     {% endblock %}
 
 {% endblock %}

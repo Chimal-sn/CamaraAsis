@@ -4,47 +4,33 @@
 
 {% load static %}
 
+<body>
+<div class="contenido">
 
+    <h2>Periodos</h2>
 
-    <h2>Profesores</h2>
-
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Fecha de Inicio</th>
-                    <th>Fecha Fin</th>
-                    <th>Eliminar</th>
-                    <th>Actualizar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for periodo in periodos %}
-                    <tr>
-                        <td>{{ periodo.Nombre }}</td>
-                        <td>{{ periodo.FechaInicio }}</td>
-                        <td>{{ periodo.FechaFin }}</td>
-                        <td>
-                            <a href="{% url 'EliminarPeriodo' periodo.idPeriodo %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este periodo?')">Eliminar</a>
-                        </td>
-                        <td>
-                            <button onclick="openModal(
-                                {{ periodo.idPeriodo }},
-                                '{{ periodo.Nombre }}',
-                                '{{ periodo.FechaInicio|date:"Y-m-d" }}',
-                                '{{ periodo.FechaFin|date:"Y-m-d" }}'
-                            )">Actualizar</button>
-
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="grid-container">
+        {% for periodo in periodos %}
+            <div class="grid-item">
+                <h4>{{ periodo.Nombre }}</h4>
+                <p><strong>Fecha de Inicio:</strong> {{ periodo.FechaInicio|date:"Y-m-d" }}</p>
+                <p><strong>Fecha Fin:</strong> {{ periodo.FechaFin|date:"Y-m-d" }}</p>
+                <div class="grid-actions">
+                    <a href="{% url 'EliminarPeriodo' periodo.idPeriodo %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este periodo?')">Eliminar</a>
+                    <button class="update-btn" onclick="openModal(
+                        {{ periodo.idPeriodo }},
+                        '{{ periodo.Nombre }}',
+                        '{{ periodo.FechaInicio|date:"Y-m-d" }}',
+                        '{{ periodo.FechaFin|date:"Y-m-d" }}'
+                    )">Actualizar</button>
+                </div>
+            </div>
+        {% endfor %}
     </div>
+    
 
 
-    <div>
+    <div class="buttons-container">
         <button onclick = "abrirCrear()">Crear Periodo</button>
     </div>
 
@@ -54,40 +40,53 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Editar Periodo</h2>
-            
+    
             <!-- Formulario de edición -->
-            <form method="POST" action="{% url 'EditarPeriodo' 0 %}" id="editForm" onsubmit="return validateMatricula()">
+            <form method="POST" action="{% url 'EditarPeriodo' 0 %}" id="editForm" onsubmit="return validarNombre(event)">
                 {% csrf_token %}
+
+                
 
                 <div>
                     <label for="nombre">Nombre:</label>
-                    {{ form.Nombre }}
+                    {{ form2.Nombre }}
+                </div>
+
+                    <datalist id="estaciones">
+                        <option value="Verano">
+                        <option value="Otoño">
+                        <option value="Invierno">
+                    </datalist>
+
+    
+                <div>
+                    <label for="edit_id_FechaInicio">Fecha de Inicio:</label>
+                    {{ form2.FechaInicio }}
                 </div>
     
                 <div>
-                    <label for="FechaInicio">Fecha de Inicio:</label>
-                    {{ form.FechaInicio }}
+                    <label for="edit_id_FechaFin">Fecha Final:</label>
+                    {{ form2.FechaFin }}
                 </div>
-    
-                <div>
-                    <label for="FechaFin">Fecha Final:</label>
-                    {{ form.FechaFin }}
-                </div>
-    
+                
+
+                <input type="hidden" name="id" id="edit_id" >
+                
                 <div>
                     <button type="submit">Editar Periodo</button>
                 </div>
-
-
             </form>
         </div>
     </div>
+    
+
+    
 
     <div div id="CrearModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="CerrarModalCrear()">&times;</span>
             <h2>Crear Periodo</h2>
-            <form method="POST" action="{% url 'CrearPeriodo' %}">
+            <form method="POST" action="{% url 'CrearPeriodo' %}" onsubmit="return validarNombre(event)">
                 {% csrf_token %}
                 
     
@@ -114,6 +113,19 @@
         </div>
     </div>
 
+
+
+    <div id = "Alerta" class="modal" style="display: none;">
+        <div class="modal-content">
+            <p id= "Mensaje"></p>
+            <button onclick="CerrarAlerta()">Cerrar</button>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
 
     
     {% block extra_css %}

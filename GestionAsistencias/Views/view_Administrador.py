@@ -1,9 +1,9 @@
 from pyexpat.errors import messages
 from django.shortcuts import get_object_or_404, redirect, render
-from ..models import DiaAsistencia, Directivos, Horario, Profesor, PeriodoEscolar
+from ..models import DiaAsistencia, Directivos, Horario, Profesor, PeriodoEscolar, Administrador
 from functools import wraps
 from ..forms import  DirectivoForm
-
+from django.http import JsonResponse
 
 def user_is_administrador(view_func):
     @wraps(view_func)
@@ -70,6 +70,7 @@ def crear_directivo(request):
         if form.is_valid():
             form.save()  # Crea y guarda el nuevo Directivo en la base de datos
             return redirect('GestionarDirectivos')  # Redirige a la lista de directivos o a otra página
+        
     else:
         form = DirectivoForm()
     
@@ -116,3 +117,52 @@ def ReporteAsis(request):
 
     # Renderizar la plantilla con los datos de profesores
     return render(request, 'Administrador/ReporteAsistencias.html', {'profesores': profesores})
+
+
+
+
+def validar_matricula(request):
+    matricula = request.GET.get('matricula')
+    directivo_id = request.GET.get('id')  # ID del directivo que estamos editando
+    if matricula:
+        # Excluir el `directivo_id` solo en `Directivos`
+        if directivo_id:
+            existe = (
+                Directivos.objects.filter(Matricula=matricula).exclude(idDirectivos=directivo_id).exists() or
+                Administrador.objects.filter(Matricula=matricula).exists() or
+                Profesor.objects.filter(Matricula=matricula).exists()
+            )
+        else:
+            existe = (
+                Directivos.objects.filter(Matricula=matricula).exists() or
+                Administrador.objects.filter(Matricula=matricula).exists() or
+                Profesor.objects.filter(Matricula=matricula).exists()
+            )
+        return JsonResponse({'existe': existe})
+    
+    # Respuesta si la `matricula` no se proporciona
+    return JsonResponse({'error': 'Matrícula no proporcionada'}, status=400)
+
+
+
+def validar_correo(request):
+    correo = request.GET.get('correo')
+    directivo_id = request.GET.get('id')  # ID del directivo que estamos editando
+    print (directivo_id)
+    if correo:
+        # Excluir el `directivo_id` solo en `Directivos`
+        if directivo_id:
+            existe = (
+                Directivos.objects.filter(Correo=correo).exclude(idDirectivos=directivo_id).exists() or
+                Profesor.objects.filter(Correo=correo).exists()
+            )
+        else:
+            existe = (
+                Directivos.objects.filter(Correo=correo).exists() or
+                Profesor.objects.filter(Correo=correo).exists()
+            )
+        return JsonResponse({'existe': existe})
+    
+    # Respuesta si el `correo` no se proporciona
+    return JsonResponse({'error': 'Correo no proporcionado'}, status=400)
+    

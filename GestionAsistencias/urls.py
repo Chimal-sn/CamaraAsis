@@ -26,6 +26,8 @@ urlpatterns = [
     path('EditarPeriodo/<int:id>',view_Directivo.EditarPeriodo, name =  "EditarPeriodo"),
     path('Justificantes/', view_Directivo.Justificante, name=  "Justificantes"),
     path('AceptarJustificante/<int:id>', view_Directivo.AceptarJustificante, name=   "AceptarJustificante"),
+    path('validar-nombre/',view_Directivo.validar_nombre, name = "validar-nombre"),
+    path('validar-fechas/',view_Directivo.validar_fechas, name ="validar-fechas"),
 
 
     path('backup_database',views.backup_database, name = "backup_database"),
@@ -54,8 +56,9 @@ urlpatterns = [
     path('InicioAdministrador/',view_Administrador.InicioAdmnistrador, name = "InicioAdministrador"),
     path('EditarDirectivo/<int:id>', view_Administrador.EditarDirectivo, name = "EditarDirectivo"),
     path('CrearDirectivo', view_Administrador.crear_directivo, name = "CrearDirectivo"),
-    path('ReporteAdministrador/', view_Administrador.ReporteAsis, name ="ReporteAdministrador")
-    
+    path('ReporteAdministrador/', view_Administrador.ReporteAsis, name ="ReporteAdministrador"),
+    path('validar-matricula/', view_Administrador.validar_matricula, name='validar_matricula'),
+    path('validar-correo/', view_Administrador.validar_correo, name='validar_correo'),
     
     
 

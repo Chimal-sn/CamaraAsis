@@ -33,7 +33,7 @@ class Profesor(models.Model):
 
 class PeriodoEscolar(models.Model):
     idPeriodo = models.BigAutoField(primary_key=True, auto_created=True, serialize=False)
-    Nombre = models.CharField(max_length=60)
+    Nombre = models.CharField(max_length=60, unique=True)
     FechaInicio = models.DateField()
     FechaFin = models.DateField()
     
