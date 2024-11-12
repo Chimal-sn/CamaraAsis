@@ -42,7 +42,7 @@
             <h2>Editar Periodo</h2>
     
             <!-- Formulario de edición -->
-            <form method="POST" action="{% url 'EditarPeriodo' 0 %}" id="editForm" onsubmit="return validarNombre(event)">
+            <form method="POST" action="{% url 'EditarPeriodo' 0 %}" id="editForm" onsubmit="return validareditar(event)">
                 {% csrf_token %}
 
                 

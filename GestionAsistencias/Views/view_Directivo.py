@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from functools import wraps
 from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario, PeriodoForm, PeriodoEditar
-from ..models import Directivos, Profesor, DiaAsistencia, Horario, PeriodoEscolar, Justificacion
+from ..models import Directivos, Profesor, DiaAsistencia, Horario, PeriodoEscolar, Justificacion, Administrador
 from django.contrib import messages
 
 
@@ -244,7 +244,9 @@ def AceptarJustificante (request, id):
 def validar_nombre(request):
     nombre = request.GET.get('nombre')
     directivo_id = request.GET.get('id')  # ID del directivo que estamos editando
-    print (directivo_id)
+    print ("hola {directivo_id}")
+    
+    
     if nombre:
         # Excluir el `directivo_id` solo en `Directivos`
         if directivo_id:
@@ -261,18 +263,73 @@ def validar_nombre(request):
     return JsonResponse({'error': 'Correo no proporcionado'}, status=400)
 
 
+
 def validar_fechas(request):
     fecha_inicio = request.GET.get('fecha_inicio')
     fecha_final = request.GET.get('fecha_final')
-
-    # Validar que ambas fechas están presentes
-    try:
-        es_valido = fecha_inicio <= fecha_final
-        return JsonResponse({'es_valido': es_valido})
-    except ValueError:
-            # Si hay un error de formato, retorna que no es válido
-        return JsonResponse({'es_valido': False})
     
+   
+    # Validar que ambas fechas están presentes
+    if fecha_inicio and fecha_final:
+        try:
+            # Convertir las fechas a objetos datetime
+            fecha_inicio_dt = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+            fecha_final_dt = datetime.strptime(fecha_final, '%Y-%m-%d')
+
+            # Comparar las fechas
+            es_valido = fecha_inicio_dt <= fecha_final_dt
+            return JsonResponse({'es_valido': es_valido})
+        except ValueError:
+            # Si hay un error de formato, retorna que no es válido
+            return JsonResponse({'es_valido': False})
+    else:
+        # Retorna que no es válido si alguna fecha falta
+        return JsonResponse({'es_valido': False})
+
+    
+def validar_matricula_profesor(request):
+    matricula = request.GET.get('matricula')
+    profesor_id = request.GET.get('id')  # ID del directivo que estamos editando
+    if matricula:
+        # Excluir el `directivo_id` solo en `Directivos`
+        if profesor_id:
+            existe = (
+                Directivos.objects.filter(Matricula=matricula).exists() or
+                Administrador.objects.filter(Matricula=matricula).exists() or
+                Profesor.objects.filter(Matricula=matricula).exclude(idProfesor=profesor_id).exists()
+            )
+        else:
+            existe = (
+                Directivos.objects.filter(Matricula=matricula).exists() or
+                Administrador.objects.filter(Matricula=matricula).exists() or
+                Profesor.objects.filter(Matricula=matricula).exists()
+            )
+        return JsonResponse({'existe': existe})
+    
+    
+    
+
+
+def validar_correo_profesor(request):
+    correo = request.GET.get('correo')
+    profesor_id = request.GET.get('id')  # ID del directivo que estamos editando
+    print (profesor_id)
+    if correo:
+        # Excluir el `directivo_id` solo en `Directivos`
+        if profesor_id:
+            existe = (
+                Directivos.objects.filter(Correo=correo).exists() or
+                Profesor.objects.filter(Correo=correo).exclude(idProfesor=profesor_id).exists()
+            )
+        else:
+            existe = (
+                Directivos.objects.filter(Correo=correo).exists() or
+                Profesor.objects.filter(Correo=correo).exists()
+            )
+        return JsonResponse({'existe': existe})
+    
+    # Respuesta si el `correo` no se proporciona
+    return JsonResponse({'error': 'Correo no proporcionado'}, status=400)
 
 
 

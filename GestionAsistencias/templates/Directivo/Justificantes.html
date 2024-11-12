@@ -1,4 +1,4 @@
-{% extends "Directivo/BaseDirectivo.html" %}
+    {% extends "Directivo/BaseDirectivo.html" %}
 
 {% block content %}
 
@@ -38,9 +38,6 @@
         </table>
     </div>
 
-    <div>
-        <button onclick = "abrirCrear()">Ingresar Profesor</button>
-    </div>
 
     <div id="editModal" class="modal" style="display: none;">
         <div class="modal-content">
@@ -124,20 +121,7 @@
         </div>
     </div>
 
-    <script>
-        const existingMatriculas = [
-            {% for directivo in directivos %}
-                '{{ directivo.Matricula }}',
-            {% endfor %}
-            {% for admin in administradores %}
-                '{{ admin.Matricula }}',
-            {% endfor %}
-            {% for profesor in profesores %}
-                '{{ profesor.Matricula }}',
-            {% endfor %}
-        ];
-    </script>
-    
+
     {% block extra_css %}
         <link rel="stylesheet" href="{% static 'MenuDirectivo/Styles/GestionProfesores.css' %}">
     {% endblock %}

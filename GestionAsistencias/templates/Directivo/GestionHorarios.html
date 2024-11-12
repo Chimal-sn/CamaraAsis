@@ -4,46 +4,32 @@
 
 {% load static %}
 
+<title>{% block title %}Gestion de Horarios{% endblock %}</title>
 
 
+<div class="contenido">
+    
     <h2>Horario</h2>
 
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Lunes</th>
-                    <th>Martes</th>
-                    <th>Miercoles</th>
-                    <th>Jueves</th>
-                    <th>Viernes</th>
-                    <th>Periodo</th>
-                    <th>Eliminar</th> 
-                    <th>Actualizar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for horario in horarios %}
-                    <tr>
-                        <td>{{ horario.Lunes }}</td>
-                        <td>{{ horario.Martes }}</td>
-                        <td>{{ horario.Miercoles }}</td>
-                        <td>{{ horario.Jueves }}</td>
-                        <td>{{ horario.Viernes }}</td>
-                        <td>{{ horario.idPeriodo }}</td>
-                        <td>
-                            <a href="{% url 'EliminarHorario' horario.idHorario profesor.idProfesor %}" onclick="return confirm('¿Estás seguro de que deseas eliminar a este horario?')">Eliminar</a>
-                        </td>
-                        <td>
-                            <button onclick="openModal({{ horario.idHorario }}, '{{ horario.Lunes|time:"H:i" }}', '{{ horario.Martes|time:"H:i" }}', '{{ horario.Miercoles|time:"H:i" }}', '{{ horario.Jueves|time:"H:i" }}', '{{ horario.Viernes|time:"H:i" }}','{{horario.idPeriodo}}')">Actualizar</button>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="grid-container">
+        {% for horario in horarios %}
+            <div class="grid-item">
+                <h4>Horario - Periodo {{ horario.idPeriodo }}</h4>
+                <p><strong>Lunes:</strong> {{ horario.Lunes }}</p>
+                <p><strong>Martes:</strong> {{ horario.Martes }}</p>
+                <p><strong>Miércoles:</strong> {{ horario.Miercoles }}</p>
+                <p><strong>Jueves:</strong> {{ horario.Jueves }}</p>
+                <p><strong>Viernes:</strong> {{ horario.Viernes }}</p>
+                <div class="grid-actions">
+                    <a href="{% url 'EliminarHorario' horario.idHorario profesor.idProfesor %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este horario?')">Eliminar</a>
+                    <button class="update-btn" onclick="openModal({{ horario.idHorario }}, '{{ horario.Lunes|time:"H:i" }}', '{{ horario.Martes|time:"H:i" }}', '{{ horario.Miercoles|time:"H:i" }}', '{{ horario.Jueves|time:"H:i" }}', '{{ horario.Viernes|time:"H:i" }}','{{horario.idPeriodo}}')">Actualizar</button>
+                </div>
+            </div>
+        {% endfor %}
     </div>
+    
 
-    <div>
+    <div class="buttons-container">
         <button onclick = "abrirCrear()">Ingresar Horario</button>
     </div>
 
@@ -115,7 +101,6 @@
                 <div>
                     <label for="Miercoles">Miercoles:</label>
                     {{ form.Miercoles }}
-                    <!-- Para mostrar el error específico de matrícula -->
                 </div>
     
                 <div>
@@ -142,9 +127,10 @@
         </div>
     </div>
 
+</div>
     
     {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'MenuDirectivo/Styles/GestionProfesores.css' %}">
+        <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/GestionDirectivos.css' %}">
     {% endblock %}
 
 {% endblock %}

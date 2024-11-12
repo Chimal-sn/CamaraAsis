@@ -17,7 +17,7 @@
                 <p><strong>Correo:</strong> {{ profesor.Correo }}</p>
                 <p><strong>Contraseña:</strong> {{ profesor.Contrasena }}</p>
                 <div class="grid-actions">
-                    <a href="{% url 'GestionHorarios' profesor.idProfesor %}" class="view-btn">Ver Horarios</a>
+                    <a href="{% url 'GestionHorarios' profesor.idProfesor %}" class="update-btn">Ver Horarios</a>
                     <a href="{% url 'EliminarProfesor' profesor.idProfesor %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>
                     <button class="update-btn" onclick="openModal({{ profesor.idProfesor }}, '{{ profesor.Nombre }}', '{{ profesor.Apellidos }}', '{{ profesor.Matricula }}', '{{ profesor.Contrasena }}', '{{ profesor.Correo }}')">Actualizar</button>
                 </div>
@@ -33,12 +33,17 @@
     <div id="editModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Editar Directivo</h2>
+            <h2>Editar Profesor</h2>
             
             <!-- Formulario de edición -->
-            <form method="POST" action="{% url 'EditarProfesor' 0 %}" id="editForm" onsubmit="return validateMatricula()">
+            <form method="POST" action="{% url 'EditarProfesor' 0 %}" id="editForm" onsubmit="return validareditar(event)">
                 {% csrf_token %}
                 
+
+
+                <input type="hidden" name="id" id="edit_id" >
+
+
                 <div>
                     <label for="id_nombre">Nombre:</label>
                     <input type="text" name="nombre" id="id_nombre" required>
@@ -55,13 +60,13 @@
                 </div>
     
                 <div>
-                    <label for="id_Contrasena">Contraseña:</label>
-                    <input type="text" name="Contrasena" id="id_Contrasena" required>
+                    <label for="id_contrasena">Contraseña:</label>
+                    <input type="text" name="Contrasena" id="id_contrasena" required>
                 </div>
     
                 <div>
-                    <label for="id_Correo">Correo:</label>
-                    <input type="email" name="Correo" id="id_Correo" required>
+                    <label for="id_correo">Correo:</label>
+                    <input type="email" name="Correo" id="id_correo" required>
                 </div>
     
                 <div>
@@ -75,7 +80,7 @@
         <div class="modal-content">
             <span class="close" onclick="CerrarModalCrear()">&times;</span>
             <h2>Registar Profesor</h2>
-            <form method="POST" action="{% url 'RegistrarProfesor' %}">
+            <form method="POST" action="{% url 'RegistrarProfesor' %}" onsubmit="return validarCrear(event)">
                 {% csrf_token %}
                 
     
@@ -92,7 +97,6 @@
                 <div>
                     <label for="matricula">Matrícula:</label>
                     {{ form.Matricula }}
-                    <!-- Para mostrar el error específico de matrícula -->
                 </div>
     
                 <div>
@@ -112,25 +116,23 @@
         </div>
     </div>
 
+
+    <div id = "Alerta" class="modal" style="display: none;">
+        <div class="modal-content">
+            <p id= "Mensaje"></p>
+            <button onclick="CerrarAlerta()">Cerrar</button>
+        </div>
+    </div>
+
 </div>
 
-    <script>
-        const existingMatriculas = [
-            {% for directivo in directivos %}
-                '{{ directivo.Matricula }}',
-            {% endfor %}
-            {% for admin in administradores %}
-                '{{ admin.Matricula }}',
-            {% endfor %}
-            {% for profesor in profesores %}
-                '{{ profesor.Matricula }}',
-            {% endfor %}
-        ];
-    </script>
-    
+
+
     {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/GestionDirectivos.css' %}">
+        <link rel="stylesheet" href="{% static 'MenuDirectivo/Styles/GestionProfesores.css' %}">
     {% endblock %}
+
+
 
 {% endblock %}
 

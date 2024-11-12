@@ -46,6 +46,8 @@ class IngresarNuevoProfesor(forms.ModelForm):
     class Meta:
         model = Profesor
         fields = ['Nombre', 'Apellidos', 'Matricula', 'Correo', 'Contrasena']
+
+
         
 
 
@@ -62,6 +64,18 @@ class IngresarNuevoHorario(forms.ModelForm):
         }
 
 
+class EditarHorario(forms.ModelForm):
+    class Meta:
+        model = Horario
+        fields = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'idPeriodo']
+        widgets = {
+            'Lunes': forms.TimeInput(attrs={'type': 'time'}),
+            'Martes': forms.TimeInput(attrs={'type': 'time'}),
+            'Miercoles': forms.TimeInput(attrs={'type': 'time'}),
+            'Jueves': forms.TimeInput(attrs={'type': 'time'}),
+            'Viernes': forms.TimeInput(attrs={'type': 'time'}),
+        }
+       
 
 class DirectivoLoginForm(forms.Form):
     Matricula = forms.CharField()
