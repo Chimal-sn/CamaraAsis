@@ -127,18 +127,6 @@ def GestionHorariosPDF(request, id):
     
     return render(request, 'Directivo/GestionHorariosPDF.html', {'horarios' : horarios, 'PDFs' : horariosPDF, 'form' : form, 'profesor':profesor, 'form2' : form2})
 
-from django import template
-
-
-register = template.Library()
-
-# Filtro para obtener el PDF asociado con un horario
-@register.filter
-def get_item(horario_id):
-    try:
-        return PDFhorario.objects.get(idHorario=horario_id)
-    except PDFhorario.DoesNotExist:
-        return None
 
 
 def GestionHorarios(request, id):
