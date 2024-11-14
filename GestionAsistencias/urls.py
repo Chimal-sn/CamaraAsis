@@ -24,10 +24,10 @@ urlpatterns = [
     path('EliminarPeriodo/<int:id>', view_Directivo.EliminarPeriodo, name = "EliminarPeriodo"),
     path('CrearPeriodo',view_Directivo.CrearPeriodo, name =  "CrearPeriodo"),
     path('EditarPeriodo/<int:id>',view_Directivo.EditarPeriodo, name =  "EditarPeriodo"),
-     path('VerPDF/<int:id_horario>/', view_Directivo.obtener_pdf_info, name='VerPDF'),
     
     path('GestionarPDFs/<int:id>',view_Directivo.GestionHorariosPDF, name = "GestionarPDFs"),
-    path('CrearPDF/<int:id>', view_Directivo.crear_pdf, name = "CrearPDF"),
+    path('CrearPDF/<int:id>/<int:idHorario>', view_Directivo.crear_pdf, name = "CrearPDF"),
+    path('EliminarPDF/<int:id>/<int:idPro>', view_Directivo.EliminarPDF, name = "EliminarPDF"),
     
     path('Justificantes/', view_Directivo.Justificante, name=  "Justificantes"),
     path('AceptarJustificante/<int:id>', view_Directivo.AceptarJustificante, name=   "AceptarJustificante"),

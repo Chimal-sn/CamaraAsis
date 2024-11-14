@@ -72,6 +72,15 @@ async function validareditar(event) {
 }
 
 
+function CrearPDF(idProf, idHor){
+    document.getElementById('SubirPDF').style.display = 'flex';
+    document.getElementById('formSPDF').action = `/CrearPDF/${idProf}/${idHor}`; 
+}
+
+function CerrarCPDF(){
+    document.getElementById('SubirPDF').style.display = 'none'
+}
+
 function closeModal() {
     document.getElementById('editModal').style.display = 'none';
 }

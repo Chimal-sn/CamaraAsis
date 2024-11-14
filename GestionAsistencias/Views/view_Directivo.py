@@ -140,8 +140,9 @@ def GestionHorarios(request, id):
     
     form = IngresarNuevoHorario()
     form2 = EdicionHorario()
+    form3 = IngresarnuevoPDF()
     
-    return render(request, 'Directivo/GestionHorarios.html', {'horarios' : horarios, 'horariosPDF': horariosPDF, 'form' : form, 'profesor':profesor, 'form2' : form2})
+    return render(request, 'Directivo/GestionHorarios.html', {'horarios' : horarios, 'horariosPDF': horariosPDF, 'form' : form, 'profesor':profesor, 'form2' : form2, 'form3' : form3})
 
 
 
@@ -231,42 +232,28 @@ def  EditarPeriodo (request,id):
     else:
         return redirect('GestionPeriodos')
 
-def obtener_pdf_info(request, id_horario):
-    try:
-        pdf = PDFhorario.objects.get(idHorario=id_horario)
-        data = {
-            'Nombre': pdf.Nombre,
-            'FechaModificacion': pdf.FechaModificacion,
-        }
-        return JsonResponse(data)
-    except PDFhorario.DoesNotExist:
-        print(f"No se encontró el PDF para idHorario {id_horario}")
-        return JsonResponse({'error': 'PDF no encontrado'}, status=404)
 
-
-
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
-
-def crear_pdf(request, id):
+def crear_pdf(request, id, idHorario):
     if request.method == 'POST':
         form = IngresarnuevoPDF(request.POST, request.FILES)
         if form.is_valid():
             pdf_horario = form.save(commit=False)
             pdf_horario.FechaModificacion = timezone.now()
+            horario = Horario.objects.get(idHorario = idHorario)
+            pdf_horario.idHorario = horario
             pdf_horario.save()
-            return redirect('GestionarPDFs', id=id)  # Redirige usando el `idProfesor`
+            return redirect('GestionHorarios', id=id)  # Redirige usando el `idProfesor`
         else:
             # Renderiza de nuevo la página con el formulario y los errores
-            return render(request, 'Directivo/GestionHorariosPDF.html', {'form': form})
+            return redirect('GestionHorarios', id=id)
 
     else:
-        # En el caso de GET, muestra el formulario vacío
-        form = IngresarnuevoPDF()
-        return render(request, 'Directivo/GestionHorariosPDF.html', {'form': form})
-
+        return redirect('GestionHorarios', id=id)
+    
+def EliminarPDF(reques, id, idPro):
+    PDF = get_object_or_404(PDFhorario, idPDFhorario=id)
+    PDF.delete()
+    return redirect('GestionHorarios', id=idPro)
 
 def Justificante (request):
     

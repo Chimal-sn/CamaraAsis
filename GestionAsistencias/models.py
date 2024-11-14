@@ -76,7 +76,7 @@ class PDFhorario(models.Model):
     idPDFhorario = models.BigAutoField(primary_key=True, auto_created=True, serialize=False)
     FechaModificacion = models.DateTimeField()
     Nombre = models.CharField(max_length=300)
-    horario_pdf = models.FileField(upload_to='pdfs/', null=True, blank=True)
+    horario_pdf = models.FileField(upload_to='pdfs/')
     idHorario =  models.ForeignKey(Horario, on_delete=models.CASCADE)
     
 

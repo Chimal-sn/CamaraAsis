@@ -20,7 +20,7 @@
                     {% if pdf.idHorario.idHorario == horario.idHorario %}
                         <div class="tabs">
                             <button class="tablinks" onclick="abrirhorario(event, {{ horario.idHorario }}, {{ pdf.idPDFhorario }})">Horario</button>
-                            <button class="tablinks" onclick="abrirPDF(event, {{ pdf.idPDFhorario }}, {{ horario.idHorario }})">Ver PDF</button>
+                            <button class="tablinks" onclick="abrirPDF(event, {{ pdf.idPDFhorario }}, {{ horario.idHorario }})">PDF</button>
                         </div>
 
                         <div id="horario-{{ horario.idHorario }}" class="tab-content" style="display: none;">
@@ -40,15 +40,22 @@
                             <h4>{{ pdf.Nombre }}</h4>
                             <p><strong>Fecha de modificación:</strong> {{ pdf.FechaModificacion }}</p>
                             <div class="grid-actions">
-                                <a href="{% url 'EliminarHorario' pdf.idPDFhorario profesor.idProfesor %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este PDF?')">Eliminar</a>
+                                <a href="{% url 'EliminarPDF' pdf.idPDFhorario profesor.idProfesor %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este PDF?')">Eliminar PDF</a>
                                 <button class="update-btn" onclick="openPDFModal({{ pdf.idPDFhorario }},'{{ pdf.Nombre }}','{{ pdf.idHorario }}')">Actualizar</button>
+                                <a class ="update-btn" href="{{ pdf.horario_pdf.url }}" download class="download-btn">Descargar PDF</a>
                             </div>
                         </div>
 
                     {% endif %}
                 {% endfor %}
             {% else %}
-                <div id="horario-{{ horario.idHorario }}" class="tab-content" style="display: block;">
+                <div class="tabs">
+                    <button class="tablinks" onclick="abrirhorario(event, {{ horario.idHorario }}, 0)">Horario</button>
+                    <button onclick = "CrearPDF( {{ profesor.idProfesor }}, '{{ horario.idHorario }}')">Subir PDF</button>
+                </div>
+
+
+                <div id="horario-{{ horario.idHorario }}" class="tab-content" style="display: none  ;">
                     <h4>Horario - Periodo {{ horario.idPeriodo }}</h4>
                     <p><strong>Lunes:</strong> {{ horario.Lunes }}</p>
                     <p><strong>Martes:</strong> {{ horario.Martes }}</p>
@@ -66,11 +73,25 @@
 </div>
 
     
-    
+    <div div id="SubirPDF" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="CerrarCPDF()">&times;</span>
+            <h2>Subir PDF</h2>
+            <form method="POST" action="{% url 'CrearPDF' 0 0 %}" id="formSPDF" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form3.as_p }}
+                <div>
+                    <button type="submit">Subir PDF</button>
+                </div>
+            </form>
+            
+
+            
+        </div>
+    </div>
 
 
     <div class="buttons-container">
-        <a href="{% url 'GestionarPDFs' profesor.idProfesor %}" >Horarios en PDF</a>
         <button onclick = "abrirCrear()">Ingresar Horario</button>
     </div>
 

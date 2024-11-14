@@ -82,7 +82,13 @@ class EdicionHorario(forms.ModelForm):
 class IngresarnuevoPDF(forms.ModelForm):
     class Meta:
         model = PDFhorario
-        fields = ['Nombre','horario_pdf','idHorario']
+        fields = ['Nombre','horario_pdf']
+        
+
+class EditarPDF(forms.ModelForm):
+    class Meta:
+        model = PDFhorario
+        fields = ['Nombre', 'horario_pdf']
 
 
 class DirectivoLoginForm(forms.Form):
