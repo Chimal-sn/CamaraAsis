@@ -1,6 +1,6 @@
 from django import forms 
 from ftplib import MAXLINE
-from .models import Profesor, Justificacion, Directivos, Administrador,Horario,PeriodoEscolar
+from .models import Profesor, Justificacion, Directivos, Administrador,Horario,PeriodoEscolar, PDFhorario
 from django.core.exceptions import ValidationError
 
 
@@ -61,21 +61,29 @@ class IngresarNuevoHorario(forms.ModelForm):
             'Miercoles': forms.TimeInput(attrs={'type': 'time'}),
             'Jueves': forms.TimeInput(attrs={'type': 'time'}),
             'Viernes': forms.TimeInput(attrs={'type': 'time'}),
+            'idPeriodo': forms.Select(attrs={'id':'id_idPeriodo'}),
         }
 
 
-class EditarHorario(forms.ModelForm):
+
+class EdicionHorario(forms.ModelForm):
     class Meta:
         model = Horario
         fields = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'idPeriodo']
         widgets = {
-            'Lunes': forms.TimeInput(attrs={'type': 'time'}),
-            'Martes': forms.TimeInput(attrs={'type': 'time'}),
-            'Miercoles': forms.TimeInput(attrs={'type': 'time'}),
-            'Jueves': forms.TimeInput(attrs={'type': 'time'}),
-            'Viernes': forms.TimeInput(attrs={'type': 'time'}),
+            'Lunes': forms.TimeInput(attrs={'type': 'time', 'id': 'lunes_id'}),
+            'Martes': forms.TimeInput(attrs={'type': 'time', 'id': 'martes_id'}),
+            'Miercoles': forms.TimeInput(attrs={'type': 'time', 'id': 'miercoles_id'}),
+            'Jueves': forms.TimeInput(attrs={'type': 'time', 'id': 'jueves_id'}),
+            'Viernes': forms.TimeInput(attrs={'type': 'time', 'id': 'viernes_id'}),
+            'idPeriodo': forms.Select(attrs={'id': 'id_periodo_id'}),  # Si 'idPeriodo' es un campo de selección
         }
        
+class IngresarnuevoPDF(forms.ModelForm):
+    class Meta:
+        model = PDFhorario
+        fields = ['Nombre','horario_pdf','idHorario']
+
 
 class DirectivoLoginForm(forms.Form):
     Matricula = forms.CharField()

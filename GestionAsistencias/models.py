@@ -48,8 +48,12 @@ class Horario(models.Model):
     Jueves = models.TimeField(null=True, blank=True)
     Viernes = models.TimeField(null=True, blank=True)
     idProfesor = models.ForeignKey(Profesor, on_delete=models.CASCADE)
-    idPeriodo =  models.ForeignKey(PeriodoEscolar, on_delete=models.CASCADE) 
+    idPeriodo =  models.ForeignKey(PeriodoEscolar, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"Horario - {self.idPeriodo.Nombre}"
 
+    
     
 class DiaAsistencia(models.Model):
     fecha_y_hora = models.DateTimeField(default=timezone.now)
@@ -72,7 +76,7 @@ class PDFhorario(models.Model):
     idPDFhorario = models.BigAutoField(primary_key=True, auto_created=True, serialize=False)
     FechaModificacion = models.DateTimeField()
     Nombre = models.CharField(max_length=300)
-    horario_pdf = models.CharField(max_length=255, null=True, blank=True)
+    horario_pdf = models.FileField(upload_to='pdfs/', null=True, blank=True)
     idHorario =  models.ForeignKey(Horario, on_delete=models.CASCADE)
     
 

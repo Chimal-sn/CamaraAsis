@@ -1,0 +1,329 @@
+body {
+    background-color: #000; /* Fondo negro para toda la página */
+    color: #fff; /* Texto blanco por defecto */
+    font-family: 'Ubuntu Mono', monospace; /* Tipografía consistente */
+    margin: 0; /* Elimina márgenes por defecto */
+    padding: 20px; /* Espaciado alrededor del contenido */
+}
+
+a{
+    text-decoration: none;
+}
+
+
+.contenido {
+    max-width: 1200px; /* Ancho máximo para el contenido */
+    margin: auto; /* Centra el contenido */
+}
+
+h2 {
+    text-align: center; /* Centra el título */
+    margin-bottom: 20px; /* Espacio debajo del título */
+    font-size: 24px; /* Tamaño de fuente para el título */
+    color: #fff; /* Blanco para el título */
+    border-bottom: 2px solid #fff; /* Línea inferior blanca */
+    padding-bottom: 10px;
+}
+
+button {
+    padding: 10px 20px; /* Espaciado interno para los botones */
+    background-color: #fff; /* Fondo blanco */
+    color: #000; /* Texto negro */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    font-size: 16px; /* Tamaño de fuente */
+    transition: background-color 0.3s, transform 0.2s; /* Transición suave para el hover */
+}
+
+button:hover {
+    background-color: #ccc; /* Color gris claro al pasar el mouse */
+    transform: scale(1.05); /* Efecto de agrandamiento */
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    background: #121212; /* Fondo oscuro */
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Sombra sutil */
+}
+
+th, td {
+    padding: 15px 25px;
+    text-align: center;
+    font-size: 16px;
+    color: #fff; /* Texto blanco */
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+th {
+    background-color: #1a1a1a; /* Fondo oscuro para encabezado */
+    color: #00e5ff; /* Azul brillante para el encabezado */
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 3px solid #333; /* Línea más pronunciada en el fondo */
+    letter-spacing: 1px; /* Espaciado de letras */
+    text-transform: uppercase; /* Mayúsculas para títulos */
+}
+
+td {
+    background-color: #1d1d1d; /* Color oscuro de fondo para celdas */
+    border-bottom: 1px solid #333; /* Línea sutil entre filas */
+}
+
+td a {
+    color: #00e5ff; /* Azul para enlaces */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+td a:hover {
+    color: #ff8c00; /* Naranja al pasar el ratón */
+    text-decoration: underline; /* Subrayado en el hover */
+}
+
+tr:hover td {
+    background-color: #333; /* Fondo oscuro al pasar el ratón */
+    transform: scale(1.02); /* Efecto de aumento sutil */
+}
+
+tr:nth-child(odd) td {
+    background-color: #222; /* Alternancia de color para filas impares */
+}
+
+tr:nth-child(even) td {
+    background-color: #1d1d1d; /* Alternancia de color para filas pares */
+}
+
+/* Transición para cuando el encabezado es interactuado */
+th:hover {
+    background-color: #333;
+    color: #ff8c00; /* Naranja cuando se pasa el ratón */
+}
+
+
+
+/* Contenedor de la cuadrícula */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px; /* Espaciado más sutil entre los elementos */
+    margin-top: 40px;
+    padding: 0 15px; /* Espaciado para evitar que los elementos se salgan */
+}
+
+/* Estilo para cada item de la cuadrícula */
+.grid-item {
+    background-color: #1e1e1e; /* Fondo oscuro */
+    color: #fff; /* Texto blanco */
+    padding: 20px;
+    border-radius: 12px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); /* Sombra sutil para dar profundidad */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column; /* Alinear elementos verticalmente */
+    justify-content: space-between;
+    height: 250px; /* Altura fija para que todos los elementos sean consistentes */
+}
+
+/* Efecto de hover para los items */
+.grid-item:hover {
+    transform: scale(1.05); /* Aumentar tamaño sutil */
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.3); /* Resplandor blanco */
+}
+
+/* Estilo del título dentro de cada item */
+.grid-item h4 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #fff; /* Blanco puro para títulos */
+    text-transform: uppercase; /* Todo en mayúsculas */
+    letter-spacing: 1px;
+}
+
+/* Estilo de los párrafos dentro de cada item */
+.grid-item p {
+    font-size: 14px;
+    margin: 5px 0;
+    color: #bbb; /* Gris suave para los detalles */
+}
+
+/* Sección de acciones dentro de cada item */
+.grid-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: auto; /* Alinea las acciones al final del contenedor */
+    justify-content: space-evenly;
+}
+
+/* Estilo para los botones de acción */
+.update-btn, .delete-btn {
+    color: #121212; /* Color oscuro para el texto */
+    background-color: #fff; /* Fondo blanco para contraste */
+    border: none; /* Sin borde */
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para profundidad */
+}
+
+/* Efecto de hover para los botones */
+.update-btn:hover, .delete-btn:hover {
+    background-color: #f1f1f1; /* Fondo gris claro al pasar el ratón */
+    color: #1e1e1e; /* Texto oscuro */
+    transform: scale(1.05); /* Sutil aumento de tamaño */
+}
+
+/* Efecto de focus en los botones */
+.update-btn:focus, .delete-btn:focus {
+    outline: none; /* Sin contorno */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Resplandor suave */
+}
+
+/* Efecto de click */
+.update-btn:active, .delete-btn:active {
+    transform: scale(0.98); /* Efecto de compresión al hacer clic */
+}
+
+
+/* Contenedor de botones */
+.buttons-container {
+    position: fixed; /* Fija el contenedor de botones en la pantalla */
+    bottom: 20px; /* 20px desde el borde inferior */
+    right: 20px; /* 20px desde el borde derecho */
+    display: flex; /* Usamos flexbox para organizar los botones */
+    flex-direction: column; /* Los botones se organizan de arriba hacia abajo */
+    gap: 15px; /* Espacio entre los botones */
+    z-index: 1000; /* Asegura que los botones estén por encima de otros elementos */
+}
+
+/* Estilo para cada botón dentro del contenedor */
+.buttons-container button {
+    padding: 15px 25px; /* Tamaño del botón */
+    background-color: #fff; /* Fondo blanco */
+    color: #121212; /* Texto oscuro */
+    border: none; /* Sin borde */
+    border-radius: 10px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de la fuente */
+    font-weight: bold;
+    cursor: pointer; /* Cursor de mano */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra para el botón */
+    transition: all 0.3s ease; /* Transición suave para los efectos */
+}
+
+/* Efecto hover para los botones */
+.buttons-container button:hover {
+    background-color: #f1f1f1; /* Cambio de fondo al pasar el mouse */
+    transform: scale(1.05); /* Agrandamiento suave al pasar el mouse */
+}
+
+/* Efecto de focus para los botones */
+.buttons-container button:focus {
+    outline: none; /* Sin contorno al hacer click */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Resplandor al hacer click */
+}
+
+/* Efecto al hacer clic en los botones */
+.buttons-container button:active {
+    transform: scale(0.98); /* Efecto de compresión al hacer clic */
+}
+
+
+.modal {
+    display: flex;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #222; /* Fondo oscuro para el modal */
+    padding: 20px;
+    border-radius: 10px; /* Bordes más redondeados */
+    width: 400px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Sombra para profundidad */
+    color: #fff; /* Texto blanco */
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #fff; /* Color blanco para el botón de cerrar */
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #ff0000; /* Rojo al pasar el mouse */
+}
+
+label {
+    display: block; /* Hace que cada etiqueta ocupe toda la línea */
+    margin-bottom: 5px; /* Espacio debajo de cada etiqueta */
+    font-size: 16px; /* Tamaño de fuente */
+    color: #fff; /* Texto blanco */
+}
+
+input, select {
+    width: 90%; /* Ancho completo */
+    padding: 10px; /* Espaciado interno */
+    margin-bottom: 15px; /* Espacio entre campos */
+    border: 1px solid #ccc; /* Borde claro */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: #333; /* Fondo oscuro para campos */
+    color: #fff; /* Texto blanco */
+    font-size: 16px; /* Tamaño de fuente */
+}
+
+input:focus, select:focus {
+    border-color: #fff; /* Color de borde blanco al enfocar */
+    outline: none; /* Sin contorno */
+}
+
+button[type="submit"] {
+    padding: 10px 15px; /* Espaciado interno para el botón */
+    background-color: #fff; /* Fondo blanco */
+    color: #000; /* Texto negro */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    font-size: 16px; /* Tamaño de fuente */
+}
+
+button[type="submit"]:hover {
+    background-color: #ccc; /* Color gris claro al pasar el mouse */
+}
+
+/* Estilos para el modal de creación */
+#CrearModal .modal-content {
+    width: 450px; /* Ancho ligeramente mayor para el modal de creación */
+}
+
+#CrearModal h2 {
+    text-align: center; /* Centra el título del modal */
+}
+
+#CrearModal label {
+    font-weight: bold; /* Negrita para las etiquetas */
+}
+
+#CrearModal input, #CrearModal select {
+    background-color: #444; /* Fondo más claro para campos en el modal de creación */
+}
+

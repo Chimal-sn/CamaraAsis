@@ -24,12 +24,22 @@ urlpatterns = [
     path('EliminarPeriodo/<int:id>', view_Directivo.EliminarPeriodo, name = "EliminarPeriodo"),
     path('CrearPeriodo',view_Directivo.CrearPeriodo, name =  "CrearPeriodo"),
     path('EditarPeriodo/<int:id>',view_Directivo.EditarPeriodo, name =  "EditarPeriodo"),
+     path('VerPDF/<int:id_horario>/', view_Directivo.obtener_pdf_info, name='VerPDF'),
+    
+    path('GestionarPDFs/<int:id>',view_Directivo.GestionHorariosPDF, name = "GestionarPDFs"),
+    path('CrearPDF/<int:id>', view_Directivo.crear_pdf, name = "CrearPDF"),
+    
     path('Justificantes/', view_Directivo.Justificante, name=  "Justificantes"),
     path('AceptarJustificante/<int:id>', view_Directivo.AceptarJustificante, name=   "AceptarJustificante"),
     path('validar-nombre/',view_Directivo.validar_nombre, name = "validar-nombre"),
     path('validar-fechas/',view_Directivo.validar_fechas, name ="validar-fechas"),
     path('validar-matricula-profesor/',view_Directivo.validar_matricula_profesor, name = "validar-matricula-profesor"),
     path('validar-correo-profesor/',view_Directivo.validar_correo_profesor, name = "validar-correo-profesor"),
+    path('validar-periodo-profesor/', view_Directivo.validar_periodo_profesor, name='validar_periodo_profesor'),
+
+
+
+
 
 
     path('backup_database',views.backup_database, name = "backup_database"),

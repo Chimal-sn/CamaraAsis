@@ -1,9 +1,10 @@
 from datetime import datetime
+from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from functools import wraps
-from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario, PeriodoForm, PeriodoEditar
-from ..models import Directivos, Profesor, DiaAsistencia, Horario, PeriodoEscolar, Justificacion, Administrador
+from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario, PeriodoForm, PeriodoEditar, EdicionHorario, IngresarnuevoPDF
+from ..models import Directivos, Profesor, DiaAsistencia, Horario, PeriodoEscolar, Justificacion, Administrador, PDFhorario
 from django.contrib import messages
 
 
@@ -114,13 +115,48 @@ def CerrarSesionDirectivo(request):
         del request.session['user_rol']
     return redirect("Inicio")
 
+def GestionHorariosPDF(request, id):
+    profesor = get_object_or_404(Profesor, idProfesor=id) 
+    horarios = Horario.objects.filter(idProfesor = profesor)
+    horariosPDF = PDFhorario.objects.filter(idHorario__in = horarios)
+    
+    
+        
+    form = IngresarnuevoPDF()
+    form2 = EdicionHorario()
+    
+    return render(request, 'Directivo/GestionHorariosPDF.html', {'horarios' : horarios, 'PDFs' : horariosPDF, 'form' : form, 'profesor':profesor, 'form2' : form2})
+
+from django import template
+
+
+register = template.Library()
+
+# Filtro para obtener el PDF asociado con un horario
+@register.filter
+def get_item(horario_id):
+    try:
+        return PDFhorario.objects.get(idHorario=horario_id)
+    except PDFhorario.DoesNotExist:
+        return None
+
 
 def GestionHorarios(request, id):
     profesor = get_object_or_404(Profesor, idProfesor=id)
     horarios = Horario.objects.filter(idProfesor = profesor)
-    form = IngresarNuevoHorario()
+    horariosPDF = PDFhorario.objects.filter(idHorario__in = horarios)
     
-    return render(request, 'Directivo/GestionHorarios.html', {'horarios' : horarios,'form' : form, 'profesor':profesor})
+    for horario in horarios:
+    # Añades un flag para verificar si existe un PDF para cada horario
+        horario.has_pdf = any(pdf.idHorario.idHorario == horario.idHorario for pdf in horariosPDF)
+    
+    form = IngresarNuevoHorario()
+    form2 = EdicionHorario()
+    
+    return render(request, 'Directivo/GestionHorarios.html', {'horarios' : horarios, 'horariosPDF': horariosPDF, 'form' : form, 'profesor':profesor, 'form2' : form2})
+
+
+
 
 def EliminarHorario(request,id,idPro):
     horario = get_object_or_404(Horario, idHorario=id)
@@ -206,8 +242,44 @@ def  EditarPeriodo (request,id):
             return redirect('GestionPeriodos')
     else:
         return redirect('GestionPeriodos')
-        
-            
+
+def obtener_pdf_info(request, id_horario):
+    try:
+        pdf = PDFhorario.objects.get(idHorario=id_horario)
+        data = {
+            'Nombre': pdf.Nombre,
+            'FechaModificacion': pdf.FechaModificacion,
+        }
+        return JsonResponse(data)
+    except PDFhorario.DoesNotExist:
+        print(f"No se encontró el PDF para idHorario {id_horario}")
+        return JsonResponse({'error': 'PDF no encontrado'}, status=404)
+
+
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+
+def crear_pdf(request, id):
+    if request.method == 'POST':
+        form = IngresarnuevoPDF(request.POST, request.FILES)
+        if form.is_valid():
+            pdf_horario = form.save(commit=False)
+            pdf_horario.FechaModificacion = timezone.now()
+            pdf_horario.save()
+            return redirect('GestionarPDFs', id=id)  # Redirige usando el `idProfesor`
+        else:
+            # Renderiza de nuevo la página con el formulario y los errores
+            return render(request, 'Directivo/GestionHorariosPDF.html', {'form': form})
+
+    else:
+        # En el caso de GET, muestra el formulario vacío
+        form = IngresarnuevoPDF()
+        return render(request, 'Directivo/GestionHorariosPDF.html', {'form': form})
+
+
 def Justificante (request):
     
     id = request.session.get('user_id')
@@ -331,6 +403,22 @@ def validar_correo_profesor(request):
     # Respuesta si el `correo` no se proporciona
     return JsonResponse({'error': 'Correo no proporcionado'}, status=400)
 
+
+
+
+def validar_periodo_profesor(request):
+    id_periodo = request.GET.get('idPeriodo')
+    profesor_id = request.GET.get('profesorId')
+    id_horario = request.GET.get('id')
+    
+    print("hola")
+    if id_horario:
+        if Horario.objects.filter(idPeriodo=id_periodo, idProfesor=profesor_id).exclude(idHorario =id_horario).exists():
+            return JsonResponse({'existe': True})
+    else:
+        if Horario.objects.filter(idPeriodo=id_periodo, idProfesor=profesor_id).exists():
+            return JsonResponse({'existe': True})
+    return JsonResponse({'existe': False})
 
 
 

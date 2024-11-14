@@ -11,28 +11,70 @@
     
     <h2>Horario</h2>
 
+
     <div class="grid-container">
-        {% for horario in horarios %}
-            <div class="grid-item">
-                <h4>Horario - Periodo {{ horario.idPeriodo }}</h4>
-                <p><strong>Lunes:</strong> {{ horario.Lunes }}</p>
-                <p><strong>Martes:</strong> {{ horario.Martes }}</p>
-                <p><strong>Miércoles:</strong> {{ horario.Miercoles }}</p>
-                <p><strong>Jueves:</strong> {{ horario.Jueves }}</p>
-                <p><strong>Viernes:</strong> {{ horario.Viernes }}</p>
-                <div class="grid-actions">
-                    <a href="{% url 'EliminarHorario' horario.idHorario profesor.idProfesor %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este horario?')">Eliminar</a>
-                    <button class="update-btn" onclick="openModal({{ horario.idHorario }}, '{{ horario.Lunes|time:"H:i" }}', '{{ horario.Martes|time:"H:i" }}', '{{ horario.Miercoles|time:"H:i" }}', '{{ horario.Jueves|time:"H:i" }}', '{{ horario.Viernes|time:"H:i" }}','{{horario.idPeriodo}}')">Actualizar</button>
+    {% for horario in horarios %}
+        <div class="grid-item">
+            {% if horario.has_pdf %}
+                {% for pdf in horariosPDF %}
+                    {% if pdf.idHorario.idHorario == horario.idHorario %}
+                        <div class="tabs">
+                            <button class="tablinks" onclick="abrirhorario(event, {{ horario.idHorario }}, {{ pdf.idPDFhorario }})">Horario</button>
+                            <button class="tablinks" onclick="abrirPDF(event, {{ pdf.idPDFhorario }}, {{ horario.idHorario }})">Ver PDF</button>
+                        </div>
+
+                        <div id="horario-{{ horario.idHorario }}" class="tab-content" style="display: none;">
+                            <h4>Horario - Periodo {{ horario.idPeriodo }}</h4>
+                            <p><strong>Lunes:</strong> {{ horario.Lunes }}</p>
+                            <p><strong>Martes:</strong> {{ horario.Martes }}</p>
+                            <p><strong>Miércoles:</strong> {{ horario.Miercoles }}</p>
+                            <p><strong>Jueves:</strong> {{ horario.Jueves }}</p>
+                            <p><strong>Viernes:</strong> {{ horario.Viernes }}</p>
+                            <div class="grid-actions">
+                                <a href="{% url 'EliminarHorario' horario.idHorario profesor.idProfesor %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este horario?')">Eliminar</a>
+                                <button class="update-btn" onclick="openModal({{ horario.idHorario }}, '{{ horario.Lunes|time:"H:i" }}', '{{ horario.Martes|time:"H:i" }}', '{{ horario.Miercoles|time:"H:i" }}', '{{ horario.Jueves|time:"H:i" }}', '{{ horario.Viernes|time:"H:i" }}','{{ horario.idPeriodo }}')">Actualizar</button>
+                            </div>
+                        </div>
+
+                        <div id="pdf-{{ pdf.idPDFhorario }}" class="tab-content" style="display: none;">
+                            <h4>{{ pdf.Nombre }}</h4>
+                            <p><strong>Fecha de modificación:</strong> {{ pdf.FechaModificacion }}</p>
+                            <div class="grid-actions">
+                                <a href="{% url 'EliminarHorario' pdf.idPDFhorario profesor.idProfesor %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este PDF?')">Eliminar</a>
+                                <button class="update-btn" onclick="openPDFModal({{ pdf.idPDFhorario }},'{{ pdf.Nombre }}','{{ pdf.idHorario }}')">Actualizar</button>
+                            </div>
+                        </div>
+
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div id="horario-{{ horario.idHorario }}" class="tab-content" style="display: block;">
+                    <h4>Horario - Periodo {{ horario.idPeriodo }}</h4>
+                    <p><strong>Lunes:</strong> {{ horario.Lunes }}</p>
+                    <p><strong>Martes:</strong> {{ horario.Martes }}</p>
+                    <p><strong>Miércoles:</strong> {{ horario.Miercoles }}</p>
+                    <p><strong>Jueves:</strong> {{ horario.Jueves }}</p>
+                    <p><strong>Viernes:</strong> {{ horario.Viernes }}</p>
+                    <div class="grid-actions">
+                        <a href="{% url 'EliminarHorario' horario.idHorario profesor.idProfesor %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este horario?')">Eliminar</a>
+                        <button class="update-btn" onclick="openModal({{ horario.idHorario }}, '{{ horario.Lunes|time:"H:i" }}', '{{ horario.Martes|time:"H:i" }}', '{{ horario.Miercoles|time:"H:i" }}', '{{ horario.Jueves|time:"H:i" }}', '{{ horario.Viernes|time:"H:i" }}','{{ horario.idPeriodo }}')">Actualizar</button>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+    
     
 
+
     <div class="buttons-container">
+        <a href="{% url 'GestionarPDFs' profesor.idProfesor %}" >Horarios en PDF</a>
         <button onclick = "abrirCrear()">Ingresar Horario</button>
     </div>
 
+    
 
 
     <div id="editModal" class="modal" style="display: none;">
@@ -41,33 +83,38 @@
             <h2>Editar Horario</h2>
     
             <!-- Formulario de edición -->
-            <form method="POST" action="{% url 'EditarHorario' 0%}" id="editForm">
+            <form method="POST" action="{% url 'EditarHorario' 0%}" id="editForm"  onsubmit="return validareditar(event)">
                 {% csrf_token %}
-    
+
+                <input type="hidden" name="id" id="edit_id" >
+
+
                 <div>
                     <label for="Lunes">Lunes:</label>
-                    {{form.Lunes}}
+                    {{form2.Lunes}}
                 </div>
                 <div>
                     <label for="Martes">Martes:</label>
-                    {{ form.Martes }}
+                    {{ form2.Martes }}
                 </div>
                 <div>
                     <label for="Miercoles">Miercoles:</label>
-                    {{ form.Miercoles }}
+                    {{ form2.Miercoles }}
                 </div>
                 <div>
                     <label for="Jueves">Jueves:</label>
-                    {{ form.Jueves }}
+                    {{ form2.Jueves }}
                 </div>
                 <div>
                     <label for="Viernes">Viernes:</label>
-                    {{ form.Viernes }}
+                    {{ form2.Viernes }}
                 </div>
+
                 <div>
                     <label for="Periodo">Periodo:</label>
-                    {{ form.idPeriodo }}
+                    {{ form2.idPeriodo }}
                 </div>
+
     
                 <div>
                     <button type="submit">Editar Horario</button>
@@ -77,17 +124,17 @@
     </div>
         
     
-
+    <input type="hidden" name="id" id="profesorId" value="{{ profesor.idProfesor }}">
 
     
     <div div id="CrearModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="CerrarModalCrear()">&times;</span>
             <h2>Crear Horario</h2>
-            <form method="POST" action="{% url 'CrearHorario' profesor.idProfesor %}">
+            <form method="POST" action="{% url 'CrearHorario' profesor.idProfesor %}"  onsubmit="return validarCrear(event)">
                 {% csrf_token %}
                 
-    
+                
                 <div>
                     <label for="Lunes">Lunes:</label>
                     {{ form.Lunes }}
@@ -127,10 +174,19 @@
         </div>
     </div>
 
+
+    <div id = "Alerta" class="modal" style="display: none;">
+        <div class="modal-content">
+            <p id= "Mensaje"></p>
+            <button onclick="CerrarAlerta()">Cerrar</button>
+        </div>
+    </div>
+
+   
 </div>
     
     {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/GestionDirectivos.css' %}">
+        <link rel="stylesheet" href="{% static 'MenuDirectivo/Styles/GestionHorario.css' %}">
     {% endblock %}
 
 {% endblock %}

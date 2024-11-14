@@ -39,7 +39,8 @@ VALUES
 ('3', 'Vegetaa', 'Luque', '123', 'C:\\Users\\Jessica\\Desktop\\Estancia II\\media\\rostros\\rostro_3.jpeg', 'VG777','si','no');
 
 
-
+INSERT INTO gestionasistencias_pdfhorario (FechaModificacion, Nombre, horario_pdf, idHorario_id)
+VALUES ('2024-11-12 10:00:00', 'Horario Matemáticas', 'matematicas_horario.pdf', 28);
 
 
 
@@ -96,3 +97,5 @@ delete from  gestionasistencias_justificacion where idDiaAsistencia_id = 14;
 
 
 delete from  gestionasistencias_justificacion where idJustificacion = 4;
+
+delete from gestionasistencias_pdfhorario where idPDFhorario = 11;
