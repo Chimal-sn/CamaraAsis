@@ -41,7 +41,7 @@
                             <p><strong>Fecha de modificación:</strong> {{ pdf.FechaModificacion }}</p>
                             <div class="grid-actions">
                                 <a href="{% url 'EliminarPDF' pdf.idPDFhorario profesor.idProfesor %}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este PDF?')">Eliminar PDF</a>
-                                <button class="update-btn" onclick="openPDFModal({{ pdf.idPDFhorario }},'{{ pdf.Nombre }}','{{ pdf.idHorario }}')">Actualizar</button>
+                                <button class="update-btn" onclick="EditarPDF({{ pdf.idPDFhorario }},'{{ pdf.Nombre }}','{{ profesor.idProfesor }}')">Actualizar</button>
                                 <a class ="update-btn" href="{{ pdf.horario_pdf.url }}" download class="download-btn">Descargar PDF</a>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             {% endif %}
-        </div>
+        </div>            
     {% endfor %}
 </div>
 
@@ -87,6 +87,27 @@
             
 
             
+        </div>
+    </div>
+
+    <div div id="Editarpdf" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="CerrarEdiPDF()">&times;</span>
+            <h2>Subir PDF</h2>
+            <form method="POST" id="FormEdPDF" action="{% url 'EditarPDF' 0 0 %}" id="formSPDF" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>
+                    <label for="Nombre">Nombre:</label>
+                    {{form4.Nombre}}
+                </div>
+                <div>
+                    <label for="Martes">PDF:</label>
+                    {{ form4.horario_pdf }}
+                </div>
+                <div>
+                    <button type="submit">Editar PDF</button>
+                </div>
+            </form>
         </div>
     </div>
 

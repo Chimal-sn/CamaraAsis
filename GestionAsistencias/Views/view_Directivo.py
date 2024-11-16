@@ -3,9 +3,12 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from functools import wraps
-from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario, PeriodoForm, PeriodoEditar, EdicionHorario, IngresarnuevoPDF
+from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario, PeriodoForm, PeriodoEditar, EdicionHorario, IngresarnuevoPDF, FormEditdePDF
 from ..models import Directivos, Profesor, DiaAsistencia, Horario, PeriodoEscolar, Justificacion, Administrador, PDFhorario
 from django.contrib import messages
+import os   
+from django.conf import settings
+
 
 
 def user_is_directivo(view_func):
@@ -27,7 +30,7 @@ def CasaDirectivo(request):
     return render(request, "Directivo/InicioDirectivo.html")
 
 
-
+@user_is_directivo
 def periodo(request):
     busqueda = request.GET.get('search', '')
     
@@ -79,13 +82,13 @@ def crear_profesor(request):
 
     return redirect('GestionProfesores')
 
-
+@user_is_directivo
 def BorrarProfesor (request, id):
     profesor = get_object_or_404(Profesor, idProfesor=id)
     profesor.delete()
     return redirect('GestionProfesores')
 
-
+@user_is_directivo
 def  EditarProfesor (request, id):
     profesor = get_object_or_404(Profesor, idProfesor=id)
     
@@ -119,10 +122,7 @@ def GestionHorariosPDF(request, id):
     profesor = get_object_or_404(Profesor, idProfesor=id) 
     horarios = Horario.objects.filter(idProfesor = profesor)
     horariosPDF = PDFhorario.objects.filter(idHorario__in = horarios)
-    
-    
-        
-    form = IngresarnuevoPDF()
+    form = IngresarnuevoPDF()   
     form2 = EdicionHorario()
     
     return render(request, 'Directivo/GestionHorariosPDF.html', {'horarios' : horarios, 'PDFs' : horariosPDF, 'form' : form, 'profesor':profesor, 'form2' : form2})
@@ -141,8 +141,9 @@ def GestionHorarios(request, id):
     form = IngresarNuevoHorario()
     form2 = EdicionHorario()
     form3 = IngresarnuevoPDF()
+    form4 = FormEditdePDF()
     
-    return render(request, 'Directivo/GestionHorarios.html', {'horarios' : horarios, 'horariosPDF': horariosPDF, 'form' : form, 'profesor':profesor, 'form2' : form2, 'form3' : form3})
+    return render(request, 'Directivo/GestionHorarios.html', {'horarios' : horarios, 'horariosPDF': horariosPDF, 'form' : form, 'profesor':profesor, 'form2' : form2, 'form3' : form3, 'form4': form4})
 
 
 
@@ -252,7 +253,28 @@ def crear_pdf(request, id, idHorario):
     
 def EliminarPDF(reques, id, idPro):
     PDF = get_object_or_404(PDFhorario, idPDFhorario=id)
+    
+    if PDF.horario_pdf:
+        file_path = os.path.join(settings.MEDIA_ROOT, PDF.horario_pdf.name)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+            
+            
     PDF.delete()
+    return redirect('GestionHorarios', id=idPro)
+
+    
+
+def EditarPDF(request, id, idPro):
+    pdf = get_object_or_404(PDFhorario, idPDFhorario=id)
+    if request.method == 'POST':
+        form = IngresarnuevoPDF(request.POST, request.FILES, instance=pdf)
+        if form.is_valid():
+            # Actualiza la fecha de modificación
+            pdf.FechaModificacion = timezone.now()
+            pdf = form.save(commit=False)
+            pdf.save()  
+            return redirect('GestionHorarios', id=idPro)
     return redirect('GestionHorarios', id=idPro)
 
 def Justificante (request):

@@ -1,16 +1,45 @@
-    {% extends "Administrador/BaseAdministrador.html" %}
+{% extends "Administrador/BaseAdministrador.html" %}
 
+{% load static %}
+
+<title>{% block title %}Reporte de Asistencias{% endblock %}</title>
 {% block content %}
 
+
 <body>
-    <h2>Reporte de Asistencias</h2>    
+    <h2>Reporte de Asistencias</h2>
+    <div>
+        <!-- Formulario de búsqueda -->
+        <form method="get" action="{% url 'ReporteAdministrador' %}">
+            <select name="search">
+                <option value="" disabled selected>Selecciona un periodo escolar...</option>
+                {% for periodo in periodos %}
+                    <option value="{{ periodo.Nombre }}">{{ periodo.Nombre }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Buscar</button>
+        </form>
+
+        <div>
+            <form method="get" action="{% url 'reporte_pdf' %}">
+                <select name="search">
+                    <option value="" disabled selected>Selecciona un periodo escolar...</option>
+                    {% for periodo in periodos %}
+                        <option value="{{ periodo.Nombre }}">{{ periodo.Nombre }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Generar PDF</button>
+            </form>
+        </div>
+        
+    </div>
     <div>
         <table>
             <thead>
                 <tr>
                     <th>Matricula</th>
                     <th>Asistencias</th>
-                    <th>Retardo</th>
+                    <th>Retardos</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,4 +56,10 @@
 </body>
 
 
+
 {% endblock%}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/GestionDirectivos.css' %}">
+{% endblock %}

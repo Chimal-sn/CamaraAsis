@@ -85,10 +85,14 @@ class IngresarnuevoPDF(forms.ModelForm):
         fields = ['Nombre','horario_pdf']
         
 
-class EditarPDF(forms.ModelForm):
+class FormEditdePDF(forms.ModelForm):
     class Meta:
         model = PDFhorario
         fields = ['Nombre', 'horario_pdf']
+        widgets = {
+            'Nombre': forms.TextInput(attrs={'id': 'nombre_id'}),
+            'horario_pdf': forms.FileInput(attrs={'id': 'horario_pdf_id'})
+        }
 
 
 class DirectivoLoginForm(forms.Form):
@@ -109,6 +113,3 @@ class DirectivoForm(forms.ModelForm):
         model = Directivos
         fields = ['Nombre', 'Apellidos', 'Matricula', 'Correo', 'Contrasena']
     
-    
-
-

@@ -77,47 +77,97 @@ def crear_directivo(request):
     return redirect('GestionarDirectivos')
 
 
+
 def ReporteAsis(request):
-    # Obtener el parámetro de búsqueda
+    # Obtener todos los periodos escolares para mostrarlos en el dropdown
+    periodos = PeriodoEscolar.objects.all()
+
+    # Obtener el término de búsqueda
     busqueda = request.GET.get('search', '')
-    
-    # Obtener el ID de usuario de la sesión (si es necesario)
-    id = request.session.get('user_id')
-    
-    # Obtener todos los profesores
+
+    # Lógica existente para procesar la búsqueda
     profesores = Profesor.objects.all()
-    
-    # Filtrar asistencias y horarios según la búsqueda
     if busqueda:
         try:
-            # Buscar el periodo escolar por nombre
             periodo = PeriodoEscolar.objects.get(Nombre=busqueda)
-            # Obtener el horario asociado al periodo
             horarios = Horario.objects.filter(idPeriodo=periodo)
-            # Filtrar las asistencias con los horarios y profesores
-            asistencias = DiaAsistencia.objects.filter(idProfesor__in=profesores, idHorario__in=horarios)
+            asistencias = DiaAsistencia.objects.filter(idHorario__in=horarios)
         except PeriodoEscolar.DoesNotExist:
             messages.error(request, 'No se encontraron resultados')
             asistencias = DiaAsistencia.objects.none()
     else:
-        # Si no hay búsqueda, obtener todas las asistencias y horarios
         asistencias = DiaAsistencia.objects.all()
         horarios = Horario.objects.all()
 
-    # Procesar cada profesor para contar asistencias y retardos
     for profesor in profesores:
-        # Filtrar horarios del profesor
         horarios_pro = horarios.filter(idProfesor=profesor)
-        # Filtrar asistencias del profesor según los horarios
         asistencias_pro = asistencias.filter(idHorario__in=horarios_pro)
-        
-        # Contar el número de asistencias y retardos
         profesor.asistencias_count = asistencias_pro.filter(Tipo="Asistencia").count()
         profesor.retardos_count = asistencias_pro.filter(Tipo="Retardo").count()
 
-    # Renderizar la plantilla con los datos de profesores
-    return render(request, 'Administrador/ReporteAsistencias.html', {'profesores': profesores})
+    return render(
+        request,
+        'Administrador/ReporteAsistencias.html',
+        {'profesores': profesores, 'periodos': periodos}
+    )
+    
 
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+
+def generar_reporte_pdf(request):
+    # Obtener los datos necesarios
+    busqueda = request.GET.get('search', '')
+    profesores = Profesor.objects.all()
+    
+    if busqueda:
+        try:
+            periodo = PeriodoEscolar.objects.get(Nombre=busqueda)
+            horarios = Horario.objects.filter(idPeriodo=periodo)
+            asistencias = DiaAsistencia.objects.filter(idHorario__in=horarios)
+        except PeriodoEscolar.DoesNotExist:
+            asistencias = DiaAsistencia.objects.none()
+    else:
+        asistencias = DiaAsistencia.objects.all()
+        horarios = Horario.objects.all()
+
+    for profesor in profesores:
+        horarios_pro = horarios.filter(idProfesor=profesor)
+        asistencias_pro = asistencias.filter(idHorario__in=horarios_pro)
+        profesor.asistencias_count = asistencias_pro.filter(Tipo="Asistencia").count()
+        profesor.retardos_count = asistencias_pro.filter(Tipo="Retardo").count()
+
+    # Crear el PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="reporte_asistencias.pdf"'
+    
+    pdf = canvas.Canvas(response, pagesize=letter)
+    pdf.setFont("Helvetica", 12)
+
+    # Título del reporte
+    pdf.drawString(200, 750, "Reporte de Asistencias")
+    pdf.drawString(100, 730, f"Periodo: {busqueda if busqueda else 'Todos los periodos'}")
+    
+    # Encabezados de la tabla
+    pdf.drawString(50, 700, "Matrícula")
+    pdf.drawString(200, 700, "Asistencias")
+    pdf.drawString(350, 700, "Retardos")
+
+    # Datos de los profesores
+    y = 680  # Altura inicial
+    for profesor in profesores:
+        pdf.drawString(50, y, str(profesor.Matricula))
+        pdf.drawString(200, y, str(profesor.asistencias_count))
+        pdf.drawString(350, y, str(profesor.retardos_count))
+        y -= 20
+        if y < 50:  # Salto de página si hay demasiados datos
+            pdf.showPage()
+            pdf.setFont("Helvetica", 12)
+            y = 750
+
+    pdf.save()
+    return response
 
 
 

@@ -25,9 +25,10 @@ urlpatterns = [
     path('CrearPeriodo',view_Directivo.CrearPeriodo, name =  "CrearPeriodo"),
     path('EditarPeriodo/<int:id>',view_Directivo.EditarPeriodo, name =  "EditarPeriodo"),
     
-    path('GestionarPDFs/<int:id>',view_Directivo.GestionHorariosPDF, name = "GestionarPDFs"),
+
     path('CrearPDF/<int:id>/<int:idHorario>', view_Directivo.crear_pdf, name = "CrearPDF"),
     path('EliminarPDF/<int:id>/<int:idPro>', view_Directivo.EliminarPDF, name = "EliminarPDF"),
+    path('EditarPDF/<int:id>/<int:idPro>', view_Directivo.EditarPDF, name = "EditarPDF"),
     
     path('Justificantes/', view_Directivo.Justificante, name=  "Justificantes"),
     path('AceptarJustificante/<int:id>', view_Directivo.AceptarJustificante, name=   "AceptarJustificante"),
@@ -69,6 +70,7 @@ urlpatterns = [
     path('EditarDirectivo/<int:id>', view_Administrador.EditarDirectivo, name = "EditarDirectivo"),
     path('CrearDirectivo', view_Administrador.crear_directivo, name = "CrearDirectivo"),
     path('ReporteAdministrador/', view_Administrador.ReporteAsis, name ="ReporteAdministrador"),
+    path('reporte-pdf/', view_Administrador.generar_reporte_pdf, name='reporte_pdf'),
     path('validar-matricula/', view_Administrador.validar_matricula, name='validar_matricula'),
     path('validar-correo/', view_Administrador.validar_correo, name='validar_correo'),
     
