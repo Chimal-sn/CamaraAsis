@@ -11,7 +11,7 @@ urlpatterns = [
     
     path('Ingresar/',view_Directivo.crear_profesor, name = "RegistrarProfesor"),
     path('homedirectivo/', view_Directivo.CasaDirectivo, name= "HomeDirectivo"),
-    path('Periodo/', view_Directivo.periodo, name = "Periodo"),  
+    path('Periodo/', view_Directivo.Reporte, name = "Periodo"),  
     path('GestionProfesores/', view_Directivo.GestionProfesores, name = "GestionProfesores"),   
     path('EliminarProfesor/<int:id>',  view_Directivo.BorrarProfesor, name = "EliminarProfesor"),
     path('EditarProfesor/<int:id>', view_Directivo.EditarProfesor, name = "EditarProfesor"),
@@ -24,8 +24,10 @@ urlpatterns = [
     path('EliminarPeriodo/<int:id>', view_Directivo.EliminarPeriodo, name = "EliminarPeriodo"),
     path('CrearPeriodo',view_Directivo.CrearPeriodo, name =  "CrearPeriodo"),
     path('EditarPeriodo/<int:id>',view_Directivo.EditarPeriodo, name =  "EditarPeriodo"),
+    path('buscar-profesores/',view_Directivo.buscar_profesores, name = "BuscarProfesores"),
+    path('buscar-periodos/',view_Directivo.buscar_periodos, name = "BuscarPeriodos"),
     
-
+    
     path('CrearPDF/<int:id>/<int:idHorario>', view_Directivo.crear_pdf, name = "CrearPDF"),
     path('EliminarPDF/<int:id>/<int:idPro>', view_Directivo.EliminarPDF, name = "EliminarPDF"),
     path('EditarPDF/<int:id>/<int:idPro>', view_Directivo.EditarPDF, name = "EditarPDF"),
@@ -74,7 +76,7 @@ urlpatterns = [
     path('validar-matricula/', view_Administrador.validar_matricula, name='validar_matricula'),
     path('validar-correo/', view_Administrador.validar_correo, name='validar_correo'),
     
-    
+    path('buscar-directivos/', view_Administrador.buscar_directivos, name='buscar_directivos'),
 
 ]
 

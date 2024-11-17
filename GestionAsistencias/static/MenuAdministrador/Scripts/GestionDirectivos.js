@@ -134,3 +134,40 @@ function CerrarModalCrear() {
     const modal = document.getElementById('CrearModal');
     modal.style.display = 'none'; // Solo cerrar el modal si el formulario es válido y se envió correctamente
 }
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputBusqueda = document.getElementById('busqueda-directivo');
+        const contenedorDirectivos = document.getElementById('directivos-container');
+
+        inputBusqueda.addEventListener('keyup', function () {
+            const query = this.value;
+
+            fetch(`/buscar-directivos/?q=${query}`, {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(data => {
+                contenedorDirectivos.innerHTML = '';  // Limpia los resultados anteriores
+
+                // Añade los nuevos resultados dinámicamente
+                data.forEach(directivo => {
+                    const item = document.createElement('div');
+                    item.className = 'grid-item';
+                    item.innerHTML = `
+                        <h4>${directivo.nombre} ${directivo.apellidos}</h4>
+                        <p><strong>Matrícula:</strong> ${directivo.matricula}</p>
+                        <p><strong>Correo:</strong> ${directivo.correo}</p>
+                        <p><strong>Contraseña:</strong> ${directivo.contrasena}</p>
+                        <div class="grid-actions">
+                            <a href="/eliminar-directivo/${directivo.id}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar a este directivo?')">Eliminar</a>
+                            <button class="update-btn" onclick="openModal(${directivo.id}, '${directivo.nombre}', '${directivo.apellidos}', '${directivo.matricula}', '${directivo.contrasena}', '${directivo.correo}')">Actualizar</button>
+                        </div>
+                    `;
+                    contenedorDirectivos.appendChild(item);
+                });
+            });
+        });
+    });
+

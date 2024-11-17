@@ -128,3 +128,39 @@ function CerrarModalCrear() {
 function CerrarAlerta(){
     document.getElementById('Alerta').style.display = 'none';
 }
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const inputBusqueda = document.getElementById('busqueda-profesor');
+    const contenedorProfesores = document.getElementById('profesores-conainer');
+
+    inputBusqueda.addEventListener('keyup', function () {
+        const query = this.value;
+
+        fetch(`/buscar-profesores/?q=${query}`, {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(data => {
+            contenedorProfesores.innerHTML = '';  // Limpia los resultados anteriores
+
+            // Añade los nuevos resultados dinámicamente
+            data.forEach(profesor => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.innerHTML = `
+                    <h4>${profesor.nombre} ${profesor.apellidos}</h4>
+                    <p><strong>Matrícula:</strong> ${profesor.matricula}</p>
+                    <p><strong>Correo:</strong> ${profesor.correo}</p>
+                    <p><strong>Contraseña:</strong> ${profesor.contrasena}</p>
+                    <div class="grid-actions">
+                        <a href="/GestionHorarios/${profesor.id}" class="update-btn">Ver Horarios</a>
+                        <a href="/EliminarProfesor/${profesor.id}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar a este profesor?')">Eliminar</a>
+                        <button class="update-btn" onclick="openModal(${profesor.id}, '${profesor.nombre}', '${profesor.apellidos}', '${profesor.matricula}', '${profesor.contrasena}', '${profesor.correo}')">Actualizar</button>
+                    </div>
+                `;
+                contenedorProfesores.appendChild(item);
+            });            
+        });
+    });
+});

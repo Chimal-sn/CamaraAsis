@@ -1,6 +1,9 @@
 {% extends "Directivo/BaseDirectivo.html" %}
 
+<title>{% block title %}Gestion de Periodos{% endblock %}</title>
+
 {% block content %}
+
 
 {% load static %}
 
@@ -9,7 +12,16 @@
 
     <h2>Periodos</h2>
 
-    <div class="grid-container">
+
+    <div>
+        <input 
+            type="text" 
+            id="busqueda-periodo" 
+            placeholder="Buscar periodo por nombre" 
+            autocomplete="off">
+    </div>
+    
+    <div id="periodos-container" class="grid-container">
         {% for periodo in periodos %}
             <div class="grid-item">
                 <h4>{{ periodo.Nombre }}</h4>
@@ -27,6 +39,7 @@
             </div>
         {% endfor %}
     </div>
+    
     
 
 

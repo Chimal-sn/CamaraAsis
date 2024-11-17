@@ -31,7 +31,7 @@ def CasaDirectivo(request):
 
 
 @user_is_directivo
-def periodo(request):
+def Reporte(request):
     busqueda = request.GET.get('search', '')
     
     id = request.session.get('user_id')
@@ -41,20 +41,22 @@ def periodo(request):
     if busqueda:
         try:
             Periodo = PeriodoEscolar.objects.get(Nombre = busqueda)
-            horario = Horario.objects.get(idPeriodo = Periodo)
-            asistencias = DiaAsistencia.objects.filter(idProfesor__in = profesores, idHorario = horario )    
+            horario = Horario.objects.get(idPeriodo = Periodo, idProfesor__in = profesores)
+            asistencias = DiaAsistencia.objects.filter(idHorario = horario )    
         except PeriodoEscolar.DoesNotExist:
             messages.error(request, 'No se encontraron resultados')
     else:
-        asistencias =  DiaAsistencia.objects.filter(idProfesor__in = profesores)
+        horarios = Horario.objects.filter(idProfesor__in = profesores)
+        asistencias = DiaAsistencia.objects.filter(idHorario__in = horarios )
     
     for profesor in profesores:
-        profesor_asistencias = asistencias.filter(idProfesor=profesor)  # Asegura que esto esté correcto
-        profesor.asistencias_count = profesor_asistencias.filter(Tipo="Asistencia").count()
-        profesor.retardos_count = profesor_asistencias.filter(Tipo="Retardo").count()
+        horarios_pro = horarios.filter(idProfesor=profesor)
+        asistencias_pro = asistencias.filter(idHorario__in=horarios_pro)
+        profesor.asistencias_count = asistencias_pro.filter(Tipo="Asistencia").count()
+        profesor.retardos_count = asistencias_pro.filter(Tipo="Retardo").count()
     
     # Renderizar la plantilla con los datos de profesores
-    return render(request, 'Directivo/VerPeriodo.html', {'profesores': profesores})
+    return render(request, 'Directivo/ReporteDirectivo.html', {'profesores': profesores})
 
 
 @user_is_directivo
@@ -66,6 +68,32 @@ def GestionProfesores (request):
     
     return render(request, 'Directivo/GestionProfesores.html', {'profesores':profesores, 'form' : form})
 
+
+
+def buscar_profesores(request):
+    query = request.GET.get('q', '')  # Obtiene el texto de búsqueda
+    id = request.session.get('user_id')
+    directivo =  Directivos.objects.get(idDirectivos=id)
+    if query:
+        profesores = Profesor.objects.filter(
+            Matricula__icontains=query,
+            idDirectivos = directivo.idDirectivos
+        )
+    else:
+        profesores = Profesor.objects.filter(idDirectivos = directivo.idDirectivos)
+
+    data = [
+        {
+            'id': profesor.idProfesor,
+            'nombre': profesor.Nombre,
+            'apellidos': profesor.Apellidos,
+            'matricula': profesor.Matricula,
+            'correo': profesor.Correo,
+            'contrasena': profesor.Contrasena
+        }
+        for profesor in profesores
+    ]
+    return JsonResponse(data, safe=False)
 
 @user_is_directivo
 def crear_profesor(request):
@@ -188,6 +216,29 @@ def EditarHorario(request, id):
 
     # Renderizar la plantilla con el formulario
     return redirect('GestionHorarios',id = idPro)
+
+
+
+def buscar_periodos(request):
+    query = request.GET.get('q', '')  # Obtiene el texto de búsqueda
+    if query:
+        periodos = PeriodoEscolar.objects.filter(
+            Nombre__icontains=query
+        )
+    else:
+        periodos = PeriodoEscolar.objects.all()
+
+    data = [
+        {
+            'id': periodo.idPeriodo,
+            'nombre': periodo.Nombre,
+            'fechainicio': periodo.FechaInicio.strftime('%Y-%m-%d'),
+            'fechafin': periodo.FechaFin.strftime('%Y-%m-%d')
+        }
+        for periodo in periodos
+    ]
+    return JsonResponse(data, safe=False)
+
 
 
 def GestionPeriodos(request):

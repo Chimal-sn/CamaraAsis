@@ -3,7 +3,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from ..models import DiaAsistencia, Directivos, Horario, Profesor, PeriodoEscolar, Administrador
 from functools import wraps
 from ..forms import  DirectivoForm
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+
 
 def user_is_administrador(view_func):
     @wraps(view_func)
@@ -31,6 +34,31 @@ def GestionarDirectivo(request):
     directivos = Directivos.objects.all()
     form = DirectivoForm() 
     return render(request, 'Administrador/GestionDirectivos.html', {'directivos': directivos, 'form': form})
+
+
+
+def buscar_directivos(request):
+    query = request.GET.get('q', '')  # Obtiene el texto de búsqueda
+    if query:
+        directivos = Directivos.objects.filter(
+            Matricula__icontains=query 
+        )
+    else:
+        directivos = Directivos.objects.all()
+
+    data = [
+        {
+            'id': directivo.idDirectivos,
+            'nombre': directivo.Nombre,
+            'apellidos': directivo.Apellidos,
+            'matricula': directivo.Matricula,
+            'correo': directivo.Correo,
+            'contrasena': directivo.Contrasena
+        }
+        for directivo in directivos
+    ]
+    return JsonResponse(data, safe=False)
+
 
 def EditarDirectivo(request, id):
     directivo = get_object_or_404(Directivos, idDirectivos=id)
@@ -112,9 +140,9 @@ def ReporteAsis(request):
     )
     
 
-from django.http import HttpResponse
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
+
+
+
 
 def generar_reporte_pdf(request):
     # Obtener los datos necesarios

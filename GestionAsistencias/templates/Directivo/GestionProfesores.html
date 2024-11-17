@@ -1,5 +1,7 @@
 {% extends "Directivo/BaseDirectivo.html" %}
 
+<title>{% block title %}Gestion de Profesores{% endblock %}</title>
+
 {% block content %}
 
 {% load static %}
@@ -9,7 +11,16 @@
 
     <h2>Profesores</h2>
 
-    <div class="grid-container">
+
+    <div>
+        <input 
+            type="text" 
+            id="busqueda-profesor" 
+            placeholder="Buscar profesor por matrícula" 
+            autocomplete="off">
+    </div>
+
+    <div id="profesores-conainer" class="grid-container">
         {% for profesor in profesores %}
             <div class="grid-item">
                 <h4>{{ profesor.Nombre }} {{ profesor.Apellidos }}</h4>

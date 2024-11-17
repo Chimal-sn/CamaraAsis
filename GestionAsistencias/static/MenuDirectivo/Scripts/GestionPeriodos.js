@@ -129,3 +129,41 @@ function CerrarModalCrear() {
 function CerrarAlerta(){
     document.getElementById('Alerta').style.display = 'none';
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const inputBusqueda = document.getElementById('busqueda-periodo');
+    const contenedorPeriodos = document.getElementById('periodos-container');
+
+    inputBusqueda.addEventListener('keyup', function () {
+        const query = this.value;
+
+        fetch(`/buscar-periodos/?q=${query}`, {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(data => {
+            contenedorPeriodos.innerHTML = ''; // Limpia los resultados anteriores
+
+            // Añade los nuevos resultados dinámicamente
+            data.forEach(periodo => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.innerHTML = `
+                    <h4>${periodo.nombre}</h4>
+                    <p><strong>Fecha de Inicio:</strong> ${periodo.fechainicio}</p>
+                    <p><strong>Fecha Fin:</strong> ${periodo.fechafin}</p>
+                    <div class="grid-actions">
+                        <a href="/EliminarPeriodo/${periodo.id}" class="delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este periodo?')">Eliminar</a>
+                        <button class="update-btn" onclick="openModal(
+                            ${periodo.id},
+                            '${periodo.nombre}',
+                            '${periodo.fechainicio}',
+                            '${periodo.fechafin}'
+                        )">Actualizar</button>
+                    </div>
+                `;
+                contenedorPeriodos.appendChild(item);
+            });      
+        });
+    });
+});

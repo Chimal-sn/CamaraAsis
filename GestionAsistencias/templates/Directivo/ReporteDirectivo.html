@@ -1,4 +1,4 @@
-{% extends "Administrador/BaseAdministrador.html" %}
+{% extends "Directivo/BaseDirectivo.html" %}
 
 {% load static %}
 
@@ -17,18 +17,6 @@
                 placeholder="Buscar por periodo escolar..." 
                 autocomplete="off">
             <ul id="resultados-busqueda"></ul>
-        </div>
-
-        <div>
-            <form method="get" action="{% url 'reporte_pdf' %}">
-                <select name="search">
-                    <option value="" disabled selected>Selecciona un periodo escolar...</option>
-                    {% for periodo in periodos %}
-                        <option value="{{ periodo.Nombre }}">{{ periodo.Nombre }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit">Generar PDF</button>
-            </form>
         </div>
         
     </div>
@@ -55,15 +43,10 @@
 </body>
 
 
+{% endblock %}
 
-{% endblock%}
 
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/GestionDirectivos.css' %}">
-{% endblock %}
-
-
-{% block extra_js %}
-    <script src="{% static 'MenuAdministrador/Scripts/Reporte.js' %}"></script> 
 {% endblock %}

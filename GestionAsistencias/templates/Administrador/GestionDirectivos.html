@@ -10,7 +10,15 @@
 <body>
 <div class="contenido">
     <h2>Directivos</h2>    
-    <div class="grid-container">
+    <div>
+        <input 
+            type="text" 
+            id="busqueda-directivo" 
+            placeholder="Buscar directivo por matrícula" 
+            autocomplete="off">
+    </div>
+    
+    <div id="directivos-container" class="grid-container">
         {% for directivo in directivos %}
             <div class="grid-item">
                 <h4>{{ directivo.Nombre }} {{ directivo.Apellidos }}</h4>
@@ -24,6 +32,7 @@
             </div>
         {% endfor %}
     </div>
+    
     
     <div class="buttons-container">
         <button onclick="abrirCrear()">Ingresar Directivo</button>
