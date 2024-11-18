@@ -86,12 +86,14 @@ def BorrarDirectivo (request, id):
     directivo.delete()
     return redirect('GestionarDirectivos')
 
-@user_is_administrador
+@user_is_administrador  
 def InicioAdmnistrador(request):
-    return render(request, "Administrador/InicioAdministrador.html")
+    admin_id = request.session.get('user_id')
+    administrador = get_object_or_404(Administrador, id=admin_id)
+    return render(request, "Administrador/InicioAdministrador.html",{'administrador':administrador})
 
 
-
+@user_is_administrador 
 def crear_directivo(request):
     if request.method == 'POST':
         form = DirectivoForm(request.POST)
@@ -105,7 +107,7 @@ def crear_directivo(request):
     return redirect('GestionarDirectivos')
 
 
-
+@user_is_administrador 
 def ReporteAsis(request):
     # Obtener todos los periodos escolares para mostrarlos en el dropdown
     periodos = PeriodoEscolar.objects.all()

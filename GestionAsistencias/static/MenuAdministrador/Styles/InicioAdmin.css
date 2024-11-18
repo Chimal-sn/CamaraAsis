@@ -1,26 +1,84 @@
-body{
+/* General Styles */
+body {
    background-color: black;
-   
+   margin: 0;
+   padding: 0;
+   display: flex; /* Habilita flexbox para centrar el contenedor principal */
+   justify-content: center;
+   align-items: center;
+   height: 100vh; /* Altura completa del viewport */
+   overflow: hidden; /* Evita desplazamientos innecesarios */
 }
 
-h1{
-   color: rgb(255, 255, 255);
-
+h1 {
+   color: white;
+   margin: 0;
+   font-size: 3rem; /* Tamaño del texto */
 }
 
-.Fondo{
-   width: 70vw; /* Establece el ancho en 80% del viewport */
-   height: 50vh; /* Establece la altura en 80% del viewport */
+.Fondo {
+   display: flex; /* Coloca los elementos uno al lado del otro */
+   justify-content: space-between; /* Separa los elementos (texto e imagen) */
+   align-items: center; /* Centra verticalmente */
+   width: 90%; /* Usa el 90% del ancho del viewport */
+   height: 90%; /* Usa el 90% de la altura del viewport */
+   box-sizing: border-box; /* Incluye el padding en el tamaño total */
+}
+
+.container {
+   flex: 1; /* El texto ocupa el espacio necesario */
+   text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.imagen {
+   max-width: 60%; /* La imagen ocupa un máximo del 40% del ancho */
+   height: auto; /* Mantiene la proporción de la imagen */
+}
+
+.f_img {
+   flex: 1; /* La imagen ocupa el espacio necesario */
    display: flex;
-   text-align: center;
-   align-items: center; 
+   justify-content: flex-end; /* Alinea la imagen al lado derecho */
+   align-items: center;
 }
 
-.imagen{
-   width: 450px; /* Ancho deseado */
-   height: auto; /* Altura proporcional */   
+/* Responsive Design */
+@media (max-width: 1024px) {
+   h1 {
+       font-size: 2.5rem; /* Reduce el tamaño del texto */
+   }
+   .Fondo {
+       flex-direction: column; /* Coloca los elementos en columna */
+       justify-content: center; /* Centra ambos elementos */
+       align-items: center; /* Asegura centrado vertical */
+   }
+   .container, .f_img {
+       flex: none;
+       text-align: center; /* Centra el texto para pantallas pequeñas */
+   }
+   .imagen {
+       max-width: 60%; /* La imagen ocupa más espacio en pantallas medianas */
+   }
 }
 
-.f_img{
-   margin-left: auto;
+@media (max-width: 768px) {
+   h1 {
+       font-size: 2rem; /* Reduce aún más el tamaño del texto */
+   }
+   .imagen {
+       max-width: 80%; /* La imagen ocupa casi todo el ancho */
+   }
+}
+
+@media (max-width: 480px) {
+   h1 {
+       font-size: 1.5rem; /* Texto más pequeño en pantallas muy pequeñas */
+   }
+   .Fondo {
+       width: 100%; /* Asegura que el contenedor use todo el ancho */
+       height: 100%; /* Usa toda la altura */
+   }
+   .imagen {
+       max-width: 90%; /* La imagen casi llena el ancho disponible */
+   }
 }

@@ -2,48 +2,58 @@
 
 {% load static %}
 
+<title>{% block title %}Asistencias{% endblock %}</title>
 
 {% block content %}
 <body>
-    <h1>Asistencias de {{ profesor.Nombre }}</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Tipo</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for asistencia in asistencias %}
+    <h2>Asistencias de {{ profesor.Nombre }}</h1>
+        <table>
+            <thead>
                 <tr>
-                    <!-- Usa el filtro `date` para mostrar solo la fecha -->
-                    <td>{{ asistencia.fecha_y_hora|date:"d/m/Y" }}</td>
-                    <!-- Usa el filtro `time` para mostrar solo la hora -->
-                    <td>{{ asistencia.fecha_y_hora|time:"H:i" }}</td>
-                    <td>{{asistencia.Tipo}}</td>
-                    <td>
-                        {% if asistencia.Tipo == "Retardo" %}
-                            <button class="abrir-modal" data-id="{{ asistencia.id }}">Justificar</button>
-                        {% endif %}
-                    </td>            
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Tipo</th>
+                    <th>Justificación</th> <!-- Columna fija -->
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="2">No hay asistencias para este profesor.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for asistencia in asistencias %}
+                    <tr>
+                        <td>{{ asistencia.fecha_y_hora|date:"d/m/Y" }}</td>
+                        <td>{{ asistencia.fecha_y_hora|time:"H:i" }}</td>
+                        <td>{{ asistencia.Tipo }}</td>
+                        <td>
+                            {% if asistencia.Tipo == "Retardo" %}
+                                {% if asistencia.justificante %}
+                                    <span class="estado-pendiente">Pendiente</span>
+                                {% else %}
+                                    <button class="abrir-modal btn-justificar" data-id="{{ asistencia.id }}">
+                                        Justificar
+                                    </button>
+                                {% endif %}
+                            {% else %}
+                                ---
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No hay asistencias para este profesor.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
 
-    <div id="modal" class="modal">
+
+    <div id="modal" class="modal" style = "display: none;">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Justificación de Asistencia</h2>
             <form id="justificacion-form" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="btn">Enviar Justificación</button>
+                <button type="submit">Enviar Justificación</button>
             </form>
         </div>
     </div>
@@ -52,8 +62,9 @@
 {% endblock  %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'MenuProfesor/Styles/Asistencia.css' %}">
+    <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/GestionDirectivos.css' %}">
 {% endblock %}
+
 
 {% block extra_js %}
     <script src="{% static 'MenuProfesor/Scripts/Asistencias.js' %}"></script> 

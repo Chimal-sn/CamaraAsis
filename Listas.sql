@@ -52,7 +52,9 @@ INSERT INTO gestionasistencias_horario (Lunes, Martes, Miercoles, Jueves, Vierne
 ('08:30:00', NULL, NULL, NULL, NULL, 1, 2);
 
 INSERT INTO gestionasistencias_diaasistencia (fecha_y_hora, Tipo, idHorario_id) VALUES
-('2024-09-25 08:15:00', 'Asistencia',2),
+('2024-09-25 08:15:00', 'Retardo',32);
+
+
 ('2024-09-25 17:00:00', 'Retardo', 2);
 
 
@@ -96,6 +98,6 @@ select *from gestionasistencias_justificacion;
 delete from  gestionasistencias_justificacion where idDiaAsistencia_id = 14;
 
 
-delete from  gestionasistencias_justificacion where idJustificacion = 4;
+delete from  gestionasistencias_justificacion where idJustificacion = 8;
 
 delete from gestionasistencias_pdfhorario where idPDFhorario = 11;

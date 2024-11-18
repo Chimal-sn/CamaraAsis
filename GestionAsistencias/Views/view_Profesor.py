@@ -1,6 +1,6 @@
 from functools import wraps
 from django.shortcuts import render,redirect,get_object_or_404
-from ..models import Profesor, Horario, DiaAsistencia 
+from ..models import Profesor, Horario, DiaAsistencia, Justificacion
 from ..forms import JustificacionForm
 
 def user_is_professor(view_func):
@@ -25,13 +25,19 @@ def HomeProfesor(request):
 def Asistencias(request):
     form = JustificacionForm()
     id = request.session.get('user_id')
-    profesor =  Profesor.objects.get(idProfesor=id)
+    profesor = Profesor.objects.get(idProfesor=id)
     
     asistencias = DiaAsistencia.objects.all()
     horarios = Horario.objects.all()
     
     horarios_pro = horarios.filter(idProfesor=profesor)
     asistencias_pro = asistencias.filter(idHorario__in=horarios_pro)
+    
+    for asistencia in asistencias_pro:
+        justificante = Justificacion.objects.filter(idDiaAsistencia=asistencia).first()  # Obtén el primer justificante
+        if justificante:  # Verifica si existe un justificante
+            if justificante.estado == "Pendiente":
+                asistencia.justificante = True  # Añade el atributo a la instancia actual de asistencia
     
     return render(request, 'Profesor/Asistencias.html',{'profesor': profesor, 'asistencias': asistencias_pro,'form': form})
 

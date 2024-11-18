@@ -9,7 +9,7 @@ botonesAbrirModal.forEach(boton => {
     boton.addEventListener('click', function() {
         const asistenciaId = this.getAttribute('data-id');
         formulario.action = `/justificar/${asistenciaId}/`;  // Actualiza la URL con el ID de la asistencia
-        modal.style.display = 'block';  // Mostrar el modal
+        modal.style.display = 'flex';  // Mostrar el modal
     });
 });
 

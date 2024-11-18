@@ -104,6 +104,14 @@ class JustificacionForm(forms.ModelForm):
     class Meta:
         model = Justificacion
         fields = ['motivo']
+        widgets = {
+            'motivo': forms.Textarea(attrs={
+                'rows': 5,  # Número de filas del cuadro de texto
+                'cols': 50,  # Número de columnas del cuadro de texto
+                'class': 'form-control',  # Clases CSS adicionales si las necesitas
+                'placeholder': 'Escribe el motivo aquí...',  # Texto de ayuda dentro del cuadro
+            }),
+        }
 
 
 

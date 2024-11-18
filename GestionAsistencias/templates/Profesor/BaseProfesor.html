@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'MenuProfesor/Styles/base.css' %}">
+    <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/Navegador.css' %}">
     {% block extra_css %}
     
     {% endblock %}
@@ -20,9 +20,6 @@
             </li>
             <li class = "navegacion">
                 <a href="{% url "Asistencias" %}">Asistencia</a>
-            </li>
-            <li class = "navegacion">
-                <a href="{% url "lista" %}">Lista</a>
             </li>
             <li class = "navegacion">
                 <a href="{% url "FotoCara" %}">CapturarCara</a>

@@ -27,13 +27,15 @@ def user_is_directivo(view_func):
 
 @user_is_directivo
 def CasaDirectivo(request):
-    return render(request, "Directivo/InicioDirectivo.html")
+    id = request.session.get('user_id')
+    directivo =  Directivos.objects.get(idDirectivos=id)
+    return render(request, "Directivo/InicioDirectivo.html", { 'directivo' : directivo } )
 
 
 @user_is_directivo
 def Reporte(request):
     busqueda = request.GET.get('search', '')
-    
+    periodos = PeriodoEscolar.objects.all()
     id = request.session.get('user_id')
     directivo =  Directivos.objects.get(idDirectivos=id)
     profesores = Profesor.objects.filter(idDirectivos = directivo.idDirectivos)
@@ -41,10 +43,11 @@ def Reporte(request):
     if busqueda:
         try:
             Periodo = PeriodoEscolar.objects.get(Nombre = busqueda)
-            horario = Horario.objects.get(idPeriodo = Periodo, idProfesor__in = profesores)
-            asistencias = DiaAsistencia.objects.filter(idHorario = horario )    
+            horarios = Horario.objects.filter(idPeriodo = Periodo, idProfesor__in = profesores)
+            asistencias = DiaAsistencia.objects.filter(idHorario__in = horarios )    
         except PeriodoEscolar.DoesNotExist:
             messages.error(request, 'No se encontraron resultados')
+            asistencias = DiaAsistencia.objects.none()
     else:
         horarios = Horario.objects.filter(idProfesor__in = profesores)
         asistencias = DiaAsistencia.objects.filter(idHorario__in = horarios )
@@ -56,7 +59,7 @@ def Reporte(request):
         profesor.retardos_count = asistencias_pro.filter(Tipo="Retardo").count()
     
     # Renderizar la plantilla con los datos de profesores
-    return render(request, 'Directivo/ReporteDirectivo.html', {'profesores': profesores})
+    return render(request, 'Directivo/ReporteDirectivo.html', {'profesores': profesores, 'periodos' : periodos })
 
 
 @user_is_directivo

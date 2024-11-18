@@ -5,14 +5,21 @@
 
 {% block content %}
 
-    <body>
-        <h1>Bienvenido Directivo</h1>
-        <!-- Aquí puedes incluir más información o detalles -->
-    </body>
-    </html>
+<body>
+    <div class = "Fondo">
+        <div class="container">
+            <h1>{{ directivo.Nombre }}</h1>
+            <h2>Matricula: {{ directivo.Matricula }}</h2>
+        </div>  
+        <div class = "f_img">
+            <img class="imagen" src="{% static 'MenuDirectivo/img/FotoInicio.jpeg' %}" alt="Cara de una persona de lado">
+        </div>
+    </div> 
+</body>
+
 
 {% endblock  %}
 
-    {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/GestionDirectivos.css' %}">
-    {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/InicioAdmin.css' %}">
+{% endblock %}

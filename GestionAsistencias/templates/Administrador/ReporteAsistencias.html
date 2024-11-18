@@ -7,16 +7,21 @@
 
 
 <body>
+<div class="contenido">
+    
     <h2>Reporte de Asistencias</h2>
     <div>
         <!-- Formulario de búsqueda -->
         <div>
-            <input 
-                type="text" 
-                id="busqueda-periodo" 
-                placeholder="Buscar por periodo escolar..." 
-                autocomplete="off">
-            <ul id="resultados-busqueda"></ul>
+            <form method="get" action="{% url 'ReporteAdministrador' %}">
+                <select name="search">
+                    <option value="" disabled selected>Selecciona un periodo escolar...</option>
+                    {% for periodo in periodos %}
+                        <option value="{{ periodo.Nombre }}">{{ periodo.Nombre }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Buscar</button>
+            </form>
         </div>
 
         <div>
@@ -52,6 +57,7 @@
             </tbody>
         </table>
     </div>
+</div>
 </body>
 
 
