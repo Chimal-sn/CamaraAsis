@@ -1,14 +1,26 @@
 {% extends "Profesor/BaseProfesor.html" %}
 
 {% load static %}
+<title>{% block title %}Inicio Profesor{% endblock %}</title>
+
 
 {% block content %}
-    <h2>Hola profesor</h2>
+
+<body>
+    <div class = "Fondo">
+        <div class="container">
+            <h1>{{ profesor.Nombre }} {{profesor.Apellidos}}</h1>
+            <h2>Matricula: {{ profesor.Matricula }}</h2>
+        </div>
+        <div class = "f_img">
+            <img class="imagen" src="{% static 'MenuProfesor/img/FotoInicio.jpeg' %}" alt="Cara de una persona de lado">
+        </div>
+    </div> 
+</body>
 
 {% endblock  %}
 
 {% block extra_css %}
-    
+    <link rel="stylesheet" href="{% static 'MenuAdministrador/Styles/InicioAdmin.css' %}">
 {% endblock %}
-
 

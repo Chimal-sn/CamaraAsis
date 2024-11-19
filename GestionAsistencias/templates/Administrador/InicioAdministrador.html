@@ -10,6 +10,7 @@
         <div class="container">
             <h1>{{ administrador.nombre }}</h1>
             <h2>Matricula: {{ administrador.Matricula }}</h2>
+            <a href="{% url 'backup_database'%}">Respaldo</a> 
         </div>
         <div class = "f_img">
             <img class="imagen" src="{% static 'MenuAdministrador/img/FotoInicio.jpg' %}" alt="Cara de una persona de lado">

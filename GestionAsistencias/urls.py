@@ -26,6 +26,8 @@ urlpatterns = [
     path('EditarPeriodo/<int:id>',view_Directivo.EditarPeriodo, name =  "EditarPeriodo"),
     path('buscar-profesores/',view_Directivo.buscar_profesores, name = "BuscarProfesores"),
     path('buscar-periodos/',view_Directivo.buscar_periodos, name = "BuscarPeriodos"),
+    path('ReportePDFDirec/',view_Directivo.generar_reporte_pdf, name = "ReportePDFDirec"),
+    path('ReporteExcel/',view_Directivo.generar_reporte_excel, name = "ReporteExcel"),
     
     
     path('CrearPDF/<int:id>/<int:idHorario>', view_Directivo.crear_pdf, name = "CrearPDF"),
@@ -45,14 +47,13 @@ urlpatterns = [
 
 
 
-    path('backup_database',views.backup_database, name = "backup_database"),
+    path('backup_database',view_Administrador.backup_database, name = "backup_database"),
 
     
     path('HomeProfesor/', view_Profesor.HomeProfesor, name="HomeProfesor"),
     path('Asistencias/', view_Profesor.Asistencias, name = 'Asistencias'),
     path('justificar/<int:asistencia_id>/', view_Profesor.justificacion_view, name='justificacion_view'),
     path('CerrarSesionProfesor/', view_Profesor.CerrarSesionProfesor, name = "CerrarSesionProfesor"),
-    path('PerfilProfesor/',view_Profesor.perfil_profesor, name= "PerfilProfesor"),
     
     
     
@@ -62,6 +63,8 @@ urlpatterns = [
     path('lista/', views.lista, name = 'lista'),
     path('eliminar/', views.clear_session_data, name = "borrar"),
     path('iniciar/', views.IniciarSesion, name='IniciarSesion'),
+    path('SubirCara',views.subirfoto, name = "SubirCara"),
+    path('Si',views.Foto, name = "Foto"),
     
     
     

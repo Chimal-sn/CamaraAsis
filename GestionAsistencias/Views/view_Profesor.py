@@ -19,7 +19,9 @@ def user_is_professor(view_func):
 
 @user_is_professor
 def HomeProfesor(request):
-    return render(request, "Profesor/HomeProfesor.html")
+    id = request.session.get('user_id')
+    profesor =  Profesor.objects.get(idProfesor=id)
+    return render(request, "Profesor/HomeProfesor.html", {'profesor':profesor})
 
 @user_is_professor 
 def Asistencias(request):
@@ -67,7 +69,3 @@ def justificacion_view(request, asistencia_id):
     return render(request, 'Profesor/Asistencias.html',{'profesor': profesor, 'asistencias': asistencias,'form': form})
 
 
-def perfil_profesor(request):
-    id = request.session.get('user_id')
-    profesor =  Profesor.objects.get(idProfesor=id)
-    return render(request, "Profesor/Perfil.html",{'profesor' : profesor})

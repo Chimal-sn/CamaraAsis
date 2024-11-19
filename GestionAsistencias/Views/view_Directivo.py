@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.utils import timezone
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from functools import wraps
 from ..forms import  IngresarNuevoProfesor, IngresarNuevoHorario, PeriodoForm, PeriodoEditar, EdicionHorario, IngresarnuevoPDF, FormEditdePDF
@@ -8,7 +8,8 @@ from ..models import Directivos, Profesor, DiaAsistencia, Horario, PeriodoEscola
 from django.contrib import messages
 import os   
 from django.conf import settings
-
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 
 def user_is_directivo(view_func):
@@ -474,3 +475,137 @@ def validar_periodo_profesor(request):
 
 
 
+def generar_reporte_pdf(request):
+    busqueda = request.GET.get('search', '')
+    id = request.session.get('user_id')
+    directivo =  Directivos.objects.get(idDirectivos=id)
+    profesores = Profesor.objects.filter(idDirectivos = directivo.idDirectivos)
+    
+    if busqueda:
+        try:
+            Periodo = PeriodoEscolar.objects.get(Nombre = busqueda)
+            horarios = Horario.objects.filter(idPeriodo = Periodo, idProfesor__in = profesores)
+            asistencias = DiaAsistencia.objects.filter(idHorario__in = horarios )    
+        except PeriodoEscolar.DoesNotExist:
+            messages.error(request, 'No se encontraron resultados')
+            asistencias = DiaAsistencia.objects.none()
+    else:
+        horarios = Horario.objects.filter(idProfesor__in = profesores)
+        asistencias = DiaAsistencia.objects.filter(idHorario__in = horarios )
+    
+    for profesor in profesores:
+        horarios_pro = horarios.filter(idProfesor=profesor)
+        asistencias_pro = asistencias.filter(idHorario__in=horarios_pro)
+        profesor.asistencias_count = asistencias_pro.filter(Tipo="Asistencia").count()
+        profesor.retardos_count = asistencias_pro.filter(Tipo="Retardo").count()
+
+    # Crear el PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="reporte_asistencias.pdf"'
+    
+    pdf = canvas.Canvas(response, pagesize=letter)
+    pdf.setFont("Helvetica", 12)
+
+    # Título del reporte
+    pdf.drawString(200, 750, "Reporte de Asistencias")
+    pdf.drawString(100, 730, f"Periodo: {busqueda if busqueda else 'Todos los periodos'}")
+    
+    # Encabezados de la tabla
+    pdf.drawString(50, 700, "Matrícula")
+    pdf.drawString(200, 700, "Asistencias")
+    pdf.drawString(350, 700, "Retardos")
+
+    # Datos de los profesores
+    y = 680  # Altura inicial
+    for profesor in profesores:
+        pdf.drawString(50, y, str(profesor.Matricula))
+        pdf.drawString(200, y, str(profesor.asistencias_count))
+        pdf.drawString(350, y, str(profesor.retardos_count))
+        y -= 20
+        if y < 50:  # Salto de página si hay demasiados datos
+            pdf.showPage()
+            pdf.setFont("Helvetica", 12)
+            y = 750
+
+    pdf.save()
+    return response
+
+
+
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment
+from django.http import HttpResponse
+from django.contrib import messages
+
+def generar_reporte_excel(request):
+    # Obtener los datos necesarios
+    busqueda = request.GET.get('search', '')
+    id = request.session.get('user_id')
+    directivo = Directivos.objects.get(idDirectivos=id)
+    profesores = Profesor.objects.filter(idDirectivos=directivo.idDirectivos)
+
+    if busqueda:
+        try:
+            periodo = PeriodoEscolar.objects.get(Nombre=busqueda)
+            horarios = Horario.objects.filter(idPeriodo=periodo, idProfesor__in=profesores)
+            asistencias = DiaAsistencia.objects.filter(idHorario__in=horarios)
+        except PeriodoEscolar.DoesNotExist:
+            messages.error(request, 'No se encontraron resultados')
+            asistencias = DiaAsistencia.objects.none()
+    else:
+        horarios = Horario.objects.filter(idProfesor__in=profesores)
+        asistencias = DiaAsistencia.objects.filter(idHorario__in=horarios)
+
+    # Contar asistencias y retardos por profesor
+    for profesor in profesores:
+        horarios_pro = horarios.filter(idProfesor=profesor)
+        asistencias_pro = asistencias.filter(idHorario__in=horarios_pro)
+        profesor.asistencias_count = asistencias_pro.filter(Tipo="Asistencia").count()
+        profesor.retardos_count = asistencias_pro.filter(Tipo="Retardo").count()
+
+    # Crear un libro de trabajo de Excel
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Reporte Asistencias"
+
+    # Título del reporte
+    ws.merge_cells('A1:D1')
+    ws['A1'] = "Reporte de Asistencias"
+    ws['A1'].font = Font(size=14, bold=True)
+    ws['A1'].alignment = Alignment(horizontal='center')
+
+    # Subtítulo con el período
+    ws.merge_cells('A2:D2')
+    ws['A2'] = f"Periodo: {busqueda if busqueda else 'Todos los periodos'}"
+    ws['A2'].font = Font(size=12, italic=True)
+    ws['A2'].alignment = Alignment(horizontal='center')
+
+    # Encabezados de la tabla
+    headers = ["Matrícula", "Nombre", "Asistencias", "Retardos"]
+    ws.append(headers)
+    for col_num, header in enumerate(headers, 1):
+        cell = ws.cell(row=3, column=col_num)
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal='center')
+
+    # Agregar los datos de los profesores
+    for profesor in profesores:
+        ws.append([
+            profesor.Matricula,
+            profesor.Nombre,
+            profesor.asistencias_count,
+            profesor.retardos_count,
+        ])
+
+    # Ajustar ancho de las columnas
+    column_widths = [15, 25, 15, 15]
+    for i, width in enumerate(column_widths, start=1):
+        ws.column_dimensions[chr(64 + i)].width = width
+
+    # Configurar la respuesta HTTP
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="reporte_asistencias.xlsx"'
+
+    # Guardar el archivo en la respuesta
+    wb.save(response)
+    return response

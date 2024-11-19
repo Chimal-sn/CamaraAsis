@@ -3,9 +3,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 from ..models import DiaAsistencia, Directivos, Horario, Profesor, PeriodoEscolar, Administrador
 from functools import wraps
 from ..forms import  DirectivoForm
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+import os
+import subprocess   
+from django.conf import settings
+from datetime import datetime
 
 
 def user_is_administrador(view_func):
@@ -245,4 +249,46 @@ def validar_correo(request):
     
     # Respuesta si el `correo` no se proporciona
     return JsonResponse({'error': 'Correo no proporcionado'}, status=400)
-    
+
+
+
+def backup_database(request):
+    # Configura el nombre y ruta del archivo de respaldo
+    backup_dir = os.path.join(settings.BASE_DIR, "backups")
+    os.makedirs(backup_dir, exist_ok=True)  # Crear el directorio si no existe
+    backup_file = os.path.join(backup_dir, f"backup_{datetime.now().strftime('%Y%m%d%H%M%S')}.sql")
+
+    # Ejecuta el comando de respaldo para MySQL
+    try:
+        command = [
+            "mysqldump",
+            "--skip-column-statistics",  # Ignorar la recopilación de estadísticas de columna
+            "--routines",  # Incluye procedimientos almacenados
+            "--triggers",  # Incluye triggers
+            "-u", settings.DATABASES['default']['USER'],
+            "-h", settings.DATABASES['default']['HOST'],
+        ]
+        
+        # Verifica si se requiere una contraseña (aunque esté vacía)
+        if settings.DATABASES['default']['PASSWORD']:
+            command.insert(3, f"-p{settings.DATABASES['default']['PASSWORD']}")
+        
+        # Agrega el nombre de la base de datos 'listas'
+        command.append('listas')
+
+        # Ejecuta el comando y guarda el respaldo
+        with open(backup_file, "w") as output_file:
+            result = subprocess.run(command, stdout=output_file, stderr=subprocess.PIPE)
+
+        # Verifica si hubo errores
+        if result.returncode != 0:
+            error_message = result.stderr.decode()  # Obtiene el mensaje de error
+            return HttpResponse(f"Error al generar el respaldo: {error_message}", status=500)
+
+        # Envía el archivo de respaldo al usuario
+        response = FileResponse(open(backup_file, "rb"), as_attachment=True)
+        response['Content-Disposition'] = f'attachment; filename="{os.path.basename(backup_file)}"'
+        return response
+
+    except Exception as e:
+        return HttpResponse(f"Error al generar el respaldo: {str(e)}", status=500)

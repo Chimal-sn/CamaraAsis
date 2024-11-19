@@ -21,6 +21,11 @@
                 <button type="submit">Buscar</button>
             </form>
         </div>
+
+
+        <div class="buttons-container">
+            <button onclick = "abrirCrear()">Generar Reporte</button>
+        </div>
         
     </div>
     <div>
@@ -43,11 +48,34 @@
             </tbody>
         </table>
     </div>
+
+    <div class="modal" id="ModalReporte" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <h2>Generar Reporte</h2>
+            <form method="get" id="FormRepor" action="{% url 'ReportePDFDirec' %}">
+                <select name="search" required>
+                    <option value="" disabled selected >Selecciona un periodo escolar...</option>
+                    {% for periodo in periodos %}
+                        <option value="{{ periodo.Nombre }}">{{ periodo.Nombre }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" onclick="generarReporte('/ReportePDFDirec')">Generar PDF</button>
+                <button type="button" onclick="generarReporte('/ReporteExcel')">Generar Excel</button>
+            </form>
+        </div>
+    </div>
+    
+
 </body>
 
 
 {% endblock %}
 
+
+{% block extra_js %}
+    <script src="{% static 'MenuDirectivo/Scripts/Reporte.js' %}"></script> 
+{% endblock %}
 
 
 {% block extra_css %}

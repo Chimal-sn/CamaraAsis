@@ -128,3 +128,16 @@ function abrirPDF(event, id, id2) {
     }
 }
 
+
+
+function EditarPDF(idPDFhorario, nombre, idProfesor) {
+    // Muestra el modal
+    document.getElementById('Editarpdf').style.display = 'flex';
+
+    // Configura la acción del formulario
+    const form = document.getElementById('FormEdPDF');
+    form.action = `/EditarPDF/${idPDFhorario}/${idProfesor}`;
+
+    // Configura el campo del nombre
+    document.getElementById('nombre_id').value = nombre;
+}
