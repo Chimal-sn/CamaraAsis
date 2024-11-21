@@ -43,9 +43,14 @@ class PeriodoEditar(forms.ModelForm):
         
 
 class IngresarNuevoProfesor(forms.ModelForm):
+    
     class Meta:
         model = Profesor
         fields = ['Nombre', 'Apellidos', 'Matricula', 'Correo', 'Contrasena']
+        widgets = {
+            'Correo': forms.EmailInput(),
+            
+        }
 
 
         
@@ -114,10 +119,12 @@ class JustificacionForm(forms.ModelForm):
         }
 
 
-
-
 class DirectivoForm(forms.ModelForm):
     class Meta:
         model = Directivos
         fields = ['Nombre', 'Apellidos', 'Matricula', 'Correo', 'Contrasena']
-    
+        widgets = {
+            'Correo': forms.EmailInput(),
+            
+        }
+        

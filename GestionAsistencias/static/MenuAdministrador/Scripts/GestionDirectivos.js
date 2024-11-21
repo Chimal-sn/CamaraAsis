@@ -171,3 +171,8 @@ function CerrarModalCrear() {
         });
     });
 
+
+function cerrarnotificacion(){
+    document.getElementById('mensaje').style.display = 'none';
+}
+

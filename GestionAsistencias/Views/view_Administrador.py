@@ -10,7 +10,7 @@ import os
 import subprocess   
 from django.conf import settings
 from datetime import datetime
-
+from django.db.models import Q
 
 def user_is_administrador(view_func):
     @wraps(view_func)
@@ -35,6 +35,8 @@ def CerrarSesionAdmin(request):
     return redirect("Inicio")
 
 def GestionarDirectivo(request):
+    storage = messages.get_messages(request)
+    storage.used = True
     directivos = Directivos.objects.all()
     form = DirectivoForm() 
     return render(request, 'Administrador/GestionDirectivos.html', {'directivos': directivos, 'form': form})
@@ -45,7 +47,8 @@ def buscar_directivos(request):
     query = request.GET.get('q', '')  # Obtiene el texto de búsqueda
     if query:
         directivos = Directivos.objects.filter(
-            Matricula__icontains=query 
+            Q(Matricula__icontains=query) |
+            Q(Correo__icontains=query)
         )
     else:
         directivos = Directivos.objects.all()
@@ -97,16 +100,20 @@ def InicioAdmnistrador(request):
     return render(request, "Administrador/InicioAdministrador.html",{'administrador':administrador})
 
 
+from django.contrib import messages
+
 @user_is_administrador 
 def crear_directivo(request):
+    storage = messages.get_messages(request)
+    storage.used = True
     if request.method == 'POST':
         form = DirectivoForm(request.POST)
         if form.is_valid():
             form.save()  # Crea y guarda el nuevo Directivo en la base de datos
-            return redirect('GestionarDirectivos')  # Redirige a la lista de directivos o a otra página
-        
-    else:
-        form = DirectivoForm()
+            messages.success(request, 'El directivo se ha registrado correctamente.')
+            return redirect('GestionarDirectivos')  # Redirige a la página de gestión de directivos
+        else:
+            messages.error(request, 'Hubo un error al registrar el directivo. Por favor, revisa los datos ingresados.')
     
     return redirect('GestionarDirectivos')
 

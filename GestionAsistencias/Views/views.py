@@ -149,7 +149,6 @@ def subirfoto(request):
     return render(request, 'Profesor/subirimagen.html')
 
 
-
 def lista(request):
     return render(request, 'Inicio/lista.html')
 
@@ -157,12 +156,55 @@ import face_recognition
 import numpy as np
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.timezone import now
 from django.utils.decorators import method_decorator
-from ..models import Profesor
-from io import BytesIO
-import base64
+from ..models import Profesor, Horario, DiaAsistencia
+from datetime import datetime, timedelta
+from pathlib import Path
 from PIL import Image
+import os
+import base64
 import json
+from io import BytesIO
+
+# Directorio para almacenar imágenes capturadas
+BASE_DIR = Path(__file__).resolve().parent
+CAPTURED_IMAGES_DIR = os.path.join(BASE_DIR, 'captured_faces')
+if not os.path.exists(CAPTURED_IMAGES_DIR):
+    os.makedirs(CAPTURED_IMAGES_DIR)
+
+# Diccionario para almacenar codificaciones dinámicas
+profesor_encodings = {}
+
+
+def save_captured_face(profesor, image_data):
+    """
+    Guarda la imagen capturada en el disco para entrenar el modelo dinámicamente.
+    """
+    filename = os.path.join(CAPTURED_IMAGES_DIR, f"{profesor.idProfesor}_{now().strftime('%Y%m%d_%H%M%S')}.jpg")
+    with open(filename, 'wb') as f:
+        f.write(image_data)
+    print(f"Imagen capturada guardada para {profesor.Nombre}: {filename}")
+
+
+def update_encodings(profesor):
+    """
+    Genera y actualiza las codificaciones del profesor basado en sus imágenes almacenadas.
+    """
+    global profesor_encodings
+    encodings = []
+    if profesor.imagen_rostro:
+        try:
+            # Suponemos que `imagen_rostro` contiene la ruta completa al archivo
+            img = face_recognition.load_image_file(profesor.imagen_rostro)
+            encoding = face_recognition.face_encodings(img)
+            if encoding:
+                encodings.append(encoding[0])
+        except Exception as e:
+            print(f"Error procesando la imagen {profesor.imagen_rostro}: {e}")
+    profesor_encodings[profesor.idProfesor] = encodings
+    print(f"Codificaciones actualizadas para {profesor.Nombre}")
+    
 
 
 @csrf_exempt
@@ -176,91 +218,61 @@ def compare_faces(request):
         image = Image.open(BytesIO(image_data))
         image = image.convert('RGB')
         image_np = np.array(image)
-        
+
         # Obtener las codificaciones de la imagen capturada
         captured_encoding = face_recognition.face_encodings(image_np)
         if not captured_encoding:
             return JsonResponse({'match': False, 'message': 'No se detectó un rostro en la imagen capturada.'})
-
         captured_encoding = captured_encoding[0]
-        
+
         # Obtener los profesores y comparar sus imágenes
         profesores = Profesor.objects.all()
         for profesor in profesores:
-            # Cargar la imagen del rostro del profesor
-            try:
-                rostro_imagen = face_recognition.load_image_file(profesor.imagen_rostro)
-                rostro_encoding = face_recognition.face_encodings(rostro_imagen)
-                if not rostro_encoding:
-                    continue
-                rostro_encoding = rostro_encoding[0]
-            except Exception as e:
-                print(f"Error al cargar la imagen del profesor {profesor.Nombre}: {e}")
-                continue
+            # Actualizar las codificaciones del profesor
+            if profesor.idProfesor not in profesor_encodings:
+                update_encodings(profesor)
 
-            # Comparar las codificaciones
-            results = face_recognition.compare_faces([rostro_encoding], captured_encoding)
-            if results[0]:
-                try:
-                    horario = Horario.objects.filter(idProfesor=profesor).last()
-                    if not horario:
-                        print(f"No se encontró un horario para el profesor {profesor.Nombre}")
-                        return JsonResponse({'match': True, 'profesor_id': profesor.Nombre})
+            # Comparar con las codificaciones almacenadas
+            encodings = profesor_encodings.get(profesor.idProfesor, [])
+            results = any(face_recognition.compare_faces(encodings, captured_encoding, tolerance=0.5))
+            if results:
+                save_captured_face(profesor, image_data)  # Guardar la imagen capturada
 
-                    hoy = timezone.now().date()  # Obtener solo la parte de la fecha actual (sin la hora)
-                    dia = hoy.weekday()
-                    hora_actual = timezone.now().time()
+                # Verificar horario y asistencia
+                horario = Horario.objects.filter(idProfesor=profesor).last()
+                if not horario:
+                    return JsonResponse({'match': True, 'profesor_id': profesor.Nombre, 'message': 'Sin horario asignado.'})
 
-                    # Filtrar las asistencias del profesor registradas hoy
-                    asistencias_hoy = DiaAsistencia.objects.filter(fecha_y_hora__date=hoy, idHorario=horario, )
-                    if asistencias_hoy.exists():
-                        print(f"Ya se encontró asistencia para el profesor {profesor.Nombre} hoy")
-                        return JsonResponse({'match': True, 'profesor_id': profesor.Nombre})
-
-                    
-                    # Obtener el horario para el día de hoy
-                    hora_horario = None
-                    if dia == 0:
-                        hora_horario = horario.Lunes
-                    elif dia == 1:
-                        hora_horario = horario.Martes
-                    elif dia == 2:
-                        hora_horario = horario.Miercoles
-                    elif dia == 3:
-                        hora_horario = horario.Jueves
-                    elif dia == 4:
-                        hora_horario = horario.Viernes
-                    elif dia  == 5:
-                        hora_horario = horario.Lunes
-
-
-                    if hora_horario is not None:
-                        rango_tiempo_superior = (datetime.combine(hoy, hora_horario) + timedelta(minutes=15)).time()
-                        rango_tiempo_inferior = (datetime.combine(hoy, hora_horario) - timedelta(minutes=5)).time()
-
-                        if rango_tiempo_inferior <= hora_actual <= rango_tiempo_superior:
-                            print("El profesor está dentro del rango de horario permitido.")
-                            Dasistencia = DiaAsistencia (Tipo="Asistencia", idHorario=horario)
-                            Dasistencia.save()
-                            return JsonResponse({'match': True, 'profesor_id': profesor.Nombre,  'asistencia': True})
-
-                        else:
-                            Dasistencia = DiaAsistencia(Tipo="Retardo", idHorario=horario)
-                            Dasistencia.save()
-                            print("El profesor está fuera del rango de horario permitido.")
-                            return JsonResponse({'match': True, 'profesor_id': profesor.Nombre,  'asistencia': True})
-
-                    else:
-                        print("No hay horario para el profesor hoy")
-                        return JsonResponse({'match': True, 'profesor_id': profesor.Nombre})
-                except Horario.DoesNotExist:
-                    print(f"No se encontró un horario para el profesor {profesor.Nombre}")
+                hoy = now().date()
+                dia = hoy.weekday()
+                hora_actual = now().time()
                 
-                return JsonResponse({'match': True, 'profesor_id': profesor.Nombre})
+                asistencias_hoy = DiaAsistencia.objects.filter(fecha_y_hora__date=hoy, idHorario=horario, )
+                if asistencias_hoy.exists():
+                    print(f"Ya se encontró asistencia para el profesor {profesor.Nombre} hoy")
+                    return JsonResponse({'match': True, 'profesor_id': profesor.Nombre})
+                    
 
-        # Si no se encontró ninguna coincidencia
-        return JsonResponse({'match': False})
-    
+                # Obtener el horario del día correspondiente
+                hora_horario = getattr(horario, ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][dia], None)
+
+                if hora_horario:
+                    rango_superior = (datetime.combine(hoy, hora_horario) + timedelta(minutes=15)).time()
+                    rango_inferior = (datetime.combine(hoy, hora_horario) - timedelta(minutes=5)).time()
+
+                    if rango_inferior <= hora_actual <= rango_superior:
+                        asistencia = DiaAsistencia(Tipo="Asistencia", idHorario=horario)
+                    else:
+                        asistencia = DiaAsistencia(Tipo="Retardo", idHorario=horario)
+                    asistencia.save()
+
+                    return JsonResponse({'match': True, 'profesor_id': profesor.Nombre, 'asistencia': asistencia.Tipo})
+
+                return JsonResponse({'match': True, 'profesor_id': profesor.Nombre, 'message': 'Sin horario para hoy.'})
+
+        # Si no se encontró coincidencia
+        return JsonResponse({'match': False, 'message': 'No se encontró coincidencia con los rostros almacenados.'})
+
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 

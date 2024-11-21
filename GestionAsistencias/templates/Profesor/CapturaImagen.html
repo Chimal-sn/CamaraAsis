@@ -1,8 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Captura de Imagen</title>
-</head>
+{% extends "Profesor/BaseProfesor.html" %}
+
+{% load static %}
+
+
+
+{% block content %}
+
+
+
 <body>
     <h1>Captura de Imagen</h1>
     <video id="video" width="640" height="480" autoplay></video>
@@ -40,5 +45,11 @@
         });
     </script>
 </body>
-</html>
+{% endblock  %}
+
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'MenuProfesor/Styles/SubirImagen.css' %}">
+{% endblock %}
 

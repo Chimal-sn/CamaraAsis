@@ -33,7 +33,7 @@
         {% endfor %}
     </div>
     
-    
+
     <div class="buttons-container">
         <button onclick="abrirCrear()">Ingresar Directivo</button>
     </div>
@@ -86,6 +86,9 @@
         </div>
     </div>
 
+
+
+    
 <!-- Modal para crear directivo -->
     <div id="CrearModal" class="modal" style="display: none;">
         <div class="modal-content">
@@ -136,6 +139,21 @@
             <button onclick="CerrarAlerta()">Cerrar</button>
         </div>
     </div>
+
+
+    
+    {% if messages %}
+        <div id = "mensaje" class="modal">
+            <div class="modal-content">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                <button onclick="cerrarnotificacion()">Cerrar</button>
+            </div>
+        </div>
+    {% endif %}
 
 </div>
 

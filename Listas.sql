@@ -88,7 +88,7 @@ UPDATE gestionasistencias_diaasistencia
 SET Tipo = "Retardo"
 WHERE id = 4;
 
-delete from  gestionasistencias_justificacion where idJustificacion = 1;
+delete from  gestionasistencias_profesor where idProfesor = 19;
 
 delete from  gestionasistencias_diaasistencia where id = 14;
 
@@ -100,4 +100,4 @@ delete from  gestionasistencias_justificacion where idDiaAsistencia_id = 14;
 
 delete from  gestionasistencias_justificacion where idJustificacion = 8;
 
-delete from gestionasistencias_pdfhorario where idPDFhorario = 11;
+delete from gestionasistencias_DiaAsistencia where idHorario_id = 33;

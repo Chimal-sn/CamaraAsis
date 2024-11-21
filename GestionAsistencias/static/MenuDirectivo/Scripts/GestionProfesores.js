@@ -65,7 +65,7 @@ async function validarCrear(event) {
         return false;
     }
 
-    event.target.submit();
+    event.target.submit();                                                                                
 }
 
 
