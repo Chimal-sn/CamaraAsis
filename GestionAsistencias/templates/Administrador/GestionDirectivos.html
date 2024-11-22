@@ -141,19 +141,7 @@
     </div>
 
 
-    
-    {% if messages %}
-        <div id = "mensaje" class="modal">
-            <div class="modal-content">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-                <button onclick="cerrarnotificacion()">Cerrar</button>
-            </div>
-        </div>
-    {% endif %}
+        
 
 </div>
 

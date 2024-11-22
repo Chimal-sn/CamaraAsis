@@ -141,3 +141,77 @@ function EditarPDF(idPDFhorario, nombre, idProfesor) {
     // Configura el campo del nombre
     document.getElementById('nombre_id').value = nombre;
 }
+
+
+function validarArchivoPDF(event) {
+    event.preventDefault(); // Detenemos el envío del formulario
+
+    // Obtenemos el archivo del input
+    const inputArchivo = document.getElementById('id_horario_pdf'); // Cambia 'horario_pdf' por el ID correcto de tu campo de archivo
+    const archivo = inputArchivo.files[0];
+
+    // Referencias para mostrar mensajes al usuario
+    const modal = document.getElementById('Alerta'); // Modal o mensaje de alerta
+    const mensaje = document.getElementById('Mensaje'); // Elemento donde mostrar el mensaje
+
+    if (!archivo) {
+        modal.style.display = 'flex';
+        mensaje.innerText = "Por favor, selecciona un archivo.";
+        return false;
+    }
+
+    // Validar extensión del archivo
+    const nombreArchivo = archivo.name.toLowerCase();
+    if (!nombreArchivo.endsWith('.pdf')) {
+        modal.style.display = 'flex';
+        mensaje.innerText = "El archivo debe tener la extensión .pdf.";
+        return false;
+    }
+
+    // Validar tipo MIME del archivo
+    if (archivo.type !== 'application/pdf') {
+        modal.style.display = 'flex';
+        mensaje.innerText = "El archivo debe ser un PDF válido.";
+        return false;
+    }
+
+    // Si pasa las validaciones, se puede enviar el formulario
+    event.target.submit();
+}
+
+
+function validarEditarPdf(event) {
+    event.preventDefault(); // Detenemos el envío del formulario
+
+    // Obtenemos el archivo del input
+    const inputArchivo = document.getElementById('horario_pdf_id'); // Cambia 'horario_pdf' por el ID correcto de tu campo de archivo
+    const archivo = inputArchivo.files[0];
+
+    // Referencias para mostrar mensajes al usuario
+    const modal = document.getElementById('Alerta'); // Modal o mensaje de alerta
+    const mensaje = document.getElementById('Mensaje'); // Elemento donde mostrar el mensaje
+
+    if (!archivo) {
+        modal.style.display = 'flex';
+        mensaje.innerText = "Por favor, selecciona un archivo.";
+        return false;
+    }
+
+    // Validar extensión del archivo
+    const nombreArchivo = archivo.name.toLowerCase();
+    if (!nombreArchivo.endsWith('.pdf')) {
+        modal.style.display = 'flex';
+        mensaje.innerText = "El archivo debe tener la extensión .pdf.";
+        return false;
+    }
+
+    // Validar tipo MIME del archivo
+    if (archivo.type !== 'application/pdf') {
+        modal.style.display = 'flex';
+        mensaje.innerText = "El archivo debe ser un PDF válido.";
+        return false;
+    }
+
+    // Si pasa las validaciones, se puede enviar el formulario
+    event.target.submit();
+}

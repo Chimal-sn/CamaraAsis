@@ -155,8 +155,6 @@ def ReporteAsis(request):
 
 
 
-
-
 def generar_reporte_pdf(request):
     # Obtener los datos necesarios
     busqueda = request.GET.get('search', '')

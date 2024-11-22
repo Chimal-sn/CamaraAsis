@@ -217,7 +217,7 @@ def compare_faces(request):
         # Convertir la imagen a formato RGB para face_recognition
         image = Image.open(BytesIO(image_data))
         image = image.convert('RGB')
-        image_np = np.array(image)
+        image_np = np.array(image)  
 
         # Obtener las codificaciones de la imagen capturada
         captured_encoding = face_recognition.face_encodings(image_np)
@@ -237,7 +237,6 @@ def compare_faces(request):
             results = any(face_recognition.compare_faces(encodings, captured_encoding, tolerance=0.5))
             if results:
                 save_captured_face(profesor, image_data)  # Guardar la imagen capturada
-
                 # Verificar horario y asistencia
                 horario = Horario.objects.filter(idProfesor=profesor).last()
                 if not horario:
@@ -251,8 +250,7 @@ def compare_faces(request):
                 if asistencias_hoy.exists():
                     print(f"Ya se encontró asistencia para el profesor {profesor.Nombre} hoy")
                     return JsonResponse({'match': True, 'profesor_id': profesor.Nombre})
-                    
-
+                
                 # Obtener el horario del día correspondiente
                 hora_horario = getattr(horario, ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][dia], None)
 

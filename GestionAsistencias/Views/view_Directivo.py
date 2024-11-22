@@ -310,7 +310,7 @@ def crear_pdf(request, id, idHorario): #funcion para crear un pdf
     else:
         return redirect('GestionHorarios', id=id) # Redirige usando el `idProfesor`
     
-    
+
     
 @user_is_directivo    
 def EliminarPDF(reques, id, idPro): #funcion para eliminar un pdf
