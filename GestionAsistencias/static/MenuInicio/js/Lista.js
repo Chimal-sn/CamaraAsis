@@ -22,7 +22,7 @@ function capturarYEnviar() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}',  // Asegúrate de incluir el token CSRF
+            'X-CSRFToken': '{{ csrf_token }}', 
         },
         body: JSON.stringify({ imageData: dataURL })
     })
@@ -54,5 +54,5 @@ function capturarYEnviar() {
     });
 }
 
-// Captura y envía la imagen cada 5 segundos (o el intervalo que desees)
+// Captura y envía la imagen cada 5 segundos
 setInterval(capturarYEnviar, 10000);  // 5000 ms = 5 segundos

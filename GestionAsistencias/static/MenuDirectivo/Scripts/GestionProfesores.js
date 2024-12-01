@@ -49,7 +49,6 @@ async function validarCrear(event) {
 
     // Validación del correo
     try {
-          // Asegúrate de que el campo correo esté en el HTML
         const response = await fetch(`/validar-correo-profesor/?correo=${encodeURIComponent(correoInput)}&id=${directivoId}`);
         const data = await response.json();
 
@@ -97,7 +96,6 @@ async function validareditar(event) {
 
     // Validación del correo
     try {
-          // Asegúrate de que el campo correo esté en el HTML
         const response = await fetch(`/validar-correo-profesor/?correo=${encodeURIComponent(correoInput)}&id=${directivoId}`);
         const data = await response.json();
 

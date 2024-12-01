@@ -57,6 +57,10 @@ def Reporte(request):
     for profesor in profesores: #se recorre los profesores
         horarios_pro = horarios.filter(idProfesor=profesor) #se obtienen los horarios del profesor
         asistencias_pro = asistencias.filter(idHorario__in=horarios_pro) #se obtienen las asistencias del profesor
+        justificantes = Justificacion.objects.filter(idDiaAsistencia__in = asistencias_pro) #se obtienen los justificantes del profesor
+        profesor.justificantes_aprobados =  justificantes.filter(estado = "Aprobado").count() #se cuenta los justificantes a
+        profesor.justificantes_rechazados =  justificantes.filter(estado = "Rechazado").count()
+        profesor.justificantes_pendientes =  justificantes.filter(estado = "Pendiente").count()
         profesor.asistencias_count = asistencias_pro.filter(Tipo="Asistencia").count() #se cuenta el numero de asistencias
         profesor.retardos_count = asistencias_pro.filter(Tipo="Retardo").count() #se cuenta el numero de retardos
     

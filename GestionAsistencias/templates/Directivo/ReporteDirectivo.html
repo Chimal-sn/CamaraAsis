@@ -7,7 +7,7 @@
 
 
 <body>
-    <h2>Reporte de Asistencias</h2>
+    <h2>Reportes</h2>
     <div>
         <!-- Formulario de búsqueda -->
         <div>
@@ -22,40 +22,74 @@
             </form>
         </div>
 
-
         <div class="buttons-container">
-            <button onclick = "abrirCrear()">Generar Reporte</button>
+            <button onclick="abrirCrear()">Generar Reporte</button>
+        </div>
+    </div>
+
+    <div>
+        <div class="tab-buttons">
+            <button onclick="mostrarReporte('asistencias')">Reporte de Asistencias</button>
+            <button onclick="mostrarReporte('justificantes')">Reporte de Justificantes</button>
         </div>
         
-    </div>
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Matricula</th>
-                    <th>Asistencias</th>
-                    <th>Retardos</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for profesor in profesores %}
+        <!-- Reporte de asistencias -->
+        <div id="reporte-asistencias" class="reporte-contenido">
+            <h3>Reporte de Asistencias</h3>
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ profesor.Matricula }}</td>
-                        <td>{{ profesor.asistencias_count }}</td>
-                        <td>{{ profesor.retardos_count }}</td>
+                        <th>Matricula</th>
+                        <th>Asistencias</th>
+                        <th>Retardos</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for profesor in profesores %}
+                        <tr>
+                            <td>{{ profesor.Matricula }}</td>
+                            <td>{{ profesor.asistencias_count }}</td>
+                            <td>{{ profesor.retardos_count }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Reporte de justificantes -->
+        <div id="reporte-justificantes" class="reporte-contenido" style="display: none;">
+            <h3>Reporte de Justificantes</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Matricula</th>
+                        <th>Aceptados</th>
+                        <th>Rechazados</th>
+                        <th>Pendientes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for profesor in profesores %}
+                        <tr>
+                            <td>{{ profesor.Matricula }}</td>
+                            <td>{{ profesor.justificantes_aprobados }}</td>
+                            <td>{{ profesor.justificantes_rechazados }}</td>
+                            <td>{{ profesor.justificantes_pendientes }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <!-- Modal para generar reportes -->
     <div class="modal" id="ModalReporte" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="cerrarModal()">&times;</span>
             <h2>Generar Reporte</h2>
             <form method="get" id="FormRepor" action="{% url 'ReportePDFDirec' %}">
                 <select name="search" required>
-                    <option value="" disabled selected >Selecciona un periodo escolar...</option>
+                    <option value="" disabled selected>Selecciona un periodo escolar...</option>
                     {% for periodo in periodos %}
                         <option value="{{ periodo.Nombre }}">{{ periodo.Nombre }}</option>
                     {% endfor %}
@@ -65,9 +99,9 @@
             </form>
         </div>
     </div>
-    
 
 </body>
+
 
 
 {% endblock %}

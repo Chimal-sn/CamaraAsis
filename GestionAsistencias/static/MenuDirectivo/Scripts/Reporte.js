@@ -16,3 +16,15 @@ function generarReporte(tipo) {
     form.submit();
 }
 
+function mostrarReporte(reporte) {
+    // Ocultar ambos reportes
+    document.getElementById('reporte-asistencias').style.display = 'none';
+    document.getElementById('reporte-justificantes').style.display = 'none';
+
+    // Mostrar el reporte seleccionado
+    if (reporte === 'asistencias') {
+        document.getElementById('reporte-asistencias').style.display = 'block';
+    } else if (reporte === 'justificantes') {
+        document.getElementById('reporte-justificantes').style.display = 'block';
+    }
+}

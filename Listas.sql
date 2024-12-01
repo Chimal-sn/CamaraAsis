@@ -100,4 +100,10 @@ delete from  gestionasistencias_justificacion where idDiaAsistencia_id = 14;
 
 delete from  gestionasistencias_justificacion where idJustificacion = 8;
 
-delete from gestionasistencias_DiaAsistencia where idHorario_id = 33;
+delete from gestionasistencias_DiaAsistencia where idHorario_id = 34;
+
+
+
+INSERT INTO gestionasistencias_justificacion (motivo, estado, idDiaAsistencia_id)
+VALUES ('Motivo médico', 'Pendiente', 20);
+

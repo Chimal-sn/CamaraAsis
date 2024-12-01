@@ -35,10 +35,9 @@ def IniciarSesion(request):
                 if (contrasena == directivo.Contrasena):  # Validación de contraseña
                     request.session['user_id'] = directivo.idDirectivos
                     request.session['user_rol'] = "Directivo"
-                    messages.success(request, f"Bienvenido {directivo.idDirectivos}")
                     return redirect('HomeDirectivo')
                 else:
-                    messages.error(request, "Contraseña incorrecta")
+                    
                     return redirect('IniciarSesion')  # Redirige si la contraseña es incorrecta
             except Directivos.DoesNotExist:
                 # Si no es Directivo, busca al Profesor
@@ -50,7 +49,7 @@ def IniciarSesion(request):
                         messages.success(request, f"Bienvenido {profesor.idProfesor}")
                         return redirect('HomeProfesor')
                     else:
-                        messages.error(request, "Contraseña incorrecta")
+                       
                         return redirect('IniciarSesion')  # Redirige si la contraseña es incorrecta
                 except Profesor.DoesNotExist:
                     # Si no encuentra ni directivo ni profesor
@@ -61,10 +60,10 @@ def IniciarSesion(request):
                             request.session['user_rol'] = "Administrador"
                             return redirect('InicioAdministrador')
                         else:
-                            messages.error(request, "Contraseña incorrecta")
+                            
                             return redirect('IniciarSesion')  # Redirige si la contraseña es incorrecta
                     except Administrador.DoesNotExist:
-                        messages.error(request,"Matricula o Contraseña incorrecta")
+                        return redirect('IniciarSesion')
         
     return render(request, 'Inicio/IniciarSesion.html', {'form_directivo': form_directivo})
 
@@ -102,7 +101,6 @@ def upload_image(request):
             img_file.write(img_data)
 
         # Actualiza el campo `imagen_rostro` del modelo `Profesor`
-          # Aquí debes seleccionar el profesor correcto
         profesor.imagen_rostro = file_path
         profesor.save()
         
@@ -195,7 +193,6 @@ def update_encodings(profesor):
     encodings = []
     if profesor.imagen_rostro:
         try:
-            # Suponemos que `imagen_rostro` contiene la ruta completa al archivo
             img = face_recognition.load_image_file(profesor.imagen_rostro)
             encoding = face_recognition.face_encodings(img)
             if encoding:

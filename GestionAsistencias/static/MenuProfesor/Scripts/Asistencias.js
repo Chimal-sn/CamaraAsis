@@ -8,7 +8,7 @@ const formulario = document.getElementById('justificacion-form');
 botonesAbrirModal.forEach(boton => {
     boton.addEventListener('click', function() {
         const asistenciaId = this.getAttribute('data-id');
-        formulario.action = `/justificar/${asistenciaId}/`;  // Actualiza la URL con el ID de la asistencia
+        formulario.action = `/justificar/${asistenciaId}/`;
         modal.style.display = 'flex';  // Mostrar el modal
     });
 });

@@ -1,5 +1,4 @@
 function openModal(id, lunes, martes, miercoles, jueves, viernes, idperi) {
-    console.log(`Valores: ${lunes}, ${martes}, ${miercoles}, ${jueves}, ${viernes}`); // Verifica los valores
 
     document.getElementById('editForm').action = `EditarHorario/${id}`;
     document.getElementById('lunes_id').value = lunes || '';
@@ -16,8 +15,7 @@ async function validarCrear(event) {
     event.preventDefault();
 
     const periodoInput = document.getElementById('id_idPeriodo').value;
-    const profesorId = document.getElementById('profesorId').value;  // Asegúrate de tener este dato
-    const modal = document.getElementById('Alerta');
+    const profesorId = document.getElementById('profesorId').value;
     const mensaje = document.getElementById('Mensaje');
 
     // Validación del periodo
@@ -46,8 +44,7 @@ async function validareditar(event) {
 
     const periodoInput = document.getElementById('id_periodo_id').value;
     const id = document.getElementById('edit_id').value;
-    const profesorId = document.getElementById('profesorId').value;  // Asegúrate de tener este dato
-    const modal = document.getElementById('Alerta');
+    const profesorId = document.getElementById('profesorId').value; 
     const mensaje = document.getElementById('Mensaje');
 
     // Validación del periodo
@@ -124,7 +121,7 @@ function abrirPDF(event, id, id2) {
 
     // Muestra el contenedor del PDF
     if (contenido) {
-        contenido.style.display = "block"; // O "flex", si prefieres otro tipo de visualización
+        contenido.style.display = "block";
     }
 }
 
@@ -147,7 +144,7 @@ function validarArchivoPDF(event) {
     event.preventDefault(); // Detenemos el envío del formulario
 
     // Obtenemos el archivo del input
-    const inputArchivo = document.getElementById('id_horario_pdf'); // Cambia 'horario_pdf' por el ID correcto de tu campo de archivo
+    const inputArchivo = document.getElementById('id_horario_pdf');
     const archivo = inputArchivo.files[0];
 
     // Referencias para mostrar mensajes al usuario
@@ -184,7 +181,7 @@ function validarEditarPdf(event) {
     event.preventDefault(); // Detenemos el envío del formulario
 
     // Obtenemos el archivo del input
-    const inputArchivo = document.getElementById('horario_pdf_id'); // Cambia 'horario_pdf' por el ID correcto de tu campo de archivo
+    const inputArchivo = document.getElementById('horario_pdf_id'); 
     const archivo = inputArchivo.files[0];
 
     // Referencias para mostrar mensajes al usuario

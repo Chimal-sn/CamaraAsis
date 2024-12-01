@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 data.forEach(periodo => {
                     const li = document.createElement('li');
                     li.textContent = periodo.nombre;
-                    li.dataset.id = periodo.id;  // Puedes guardar el ID para usarlo más adelante
+                    li.dataset.id = periodo.id;
                     li.addEventListener('click', function () {
                         inputBusqueda.value = this.textContent; // Llena el input con el valor seleccionado
                         resultados.innerHTML = ""; // Limpia los resultados después de seleccionar

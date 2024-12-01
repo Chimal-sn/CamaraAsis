@@ -12,10 +12,10 @@ function openModal(id, nombre, fechainicio, fechafin) {
 async function validarNombre(event) {
     event.preventDefault(); // Prevenir el envío del formulario
 
-    const nombre = document.getElementById('id_Nombre').value;  // Asegúrate de que este campo tenga el ID correcto
+    const nombre = document.getElementById('id_Nombre').value;  
     const modal = document.getElementById('Alerta');
     const mensaje = document.getElementById('Mensaje');
-    const editId = document.getElementById('edit_id');  // Obtener el campo edit_id (puede ser null si no existe)
+    const editId = document.getElementById('edit_id');
     const fechainicio = document.getElementById('id_FechaInicio').value;
     const fechafin = document.getElementById('id_FechaFin').value;
 
@@ -65,10 +65,10 @@ async function validarNombre(event) {
 async function validareditar(event) {
     event.preventDefault(); // Prevenir el envío del formulario
 
-    const nombre = document.getElementById('id_nombre').value;  // Asegúrate de que este campo tenga el ID correcto
+    const nombre = document.getElementById('id_nombre').value;  
     const modal = document.getElementById('Alerta');
     const mensaje = document.getElementById('Mensaje');
-    const id = document.getElementById('edit_id').value;  // Obtener el campo edit_id (puede ser null si no existe)
+    const id = document.getElementById('edit_id').value; 
     const fechainicio = document.getElementById('id_fecha_inicio').value;
     const fechafin = document.getElementById('id_fecha_fin').value;
 
